@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Gestión de secuencias</h1>
-    <?php if (!$secuencias): ?>
+    <?php if (!$secuencias) : ?>
         <h2>Aún no hay datos</h2>
     <?php endif ?>
     <form action="<?= base_url('/configuracion/secuencias') ?>" method="post" accept-charset="utf-8"
@@ -16,7 +16,8 @@
                 <td>Editables</td>
                 <td>Estado</td>
             </tr>
-            <?php if ($secuencias) foreach ($secuencias as $key => $value): ?>
+            <?php if ($secuencias) {
+                foreach ($secuencias as $key => $value) : ?>
                 <tr id="fila<?= $key ?>"
                     class="<?= $value['estado'] > 0 ? ($value['estado'] == 1 ? 'success' : 'active') : 'danger' ?>">
                     <td><input id="id<?= $key ?>" name="id[<?= $key ?>]" value="<?= $value['id'] ?>"
@@ -39,7 +40,8 @@
                                onClick="checkactive(<?= $key ?>);" <?= $value['estado'] == 0 ? 'checked' : '' ?>>
                         Desactivado</input></td>
                 </tr>
-            <?php endforeach ?>
+                <?php endforeach;
+            } ?>
         </table>
         <div class="row">
             <span><button class="btn btn-primary btn-block big-text-touch-button" onClick="addsec();" type="button">Nueva<br/>línea</button></span>

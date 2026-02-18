@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Gestión de centros de costes</h1>
-    <?php if (!$centros): ?>
+    <?php if (!$centros) : ?>
         <h2>Aún no hay datos</h2>
     <?php endif ?>
     <form action="<?= base_url('/configuracion/centros') ?>" method="post" accept-charset="utf-8"
@@ -13,7 +13,8 @@
                 <td>Texto botón</td>
                 <td>Estado</td>
             </tr>
-            <?php if ($centros) foreach ($centros as $key => $value): ?>
+            <?php if ($centros) {
+                foreach ($centros as $key => $value) : ?>
                 <tr id="fila<?= $key ?>"
                     class="<?= $value['estado'] > 0 ? ($value['estado'] == 1 ? 'success' : 'active') : 'danger' ?>">
                     <td><input id="id<?= $key ?>" name="id[<?= $key ?>]" value="<?= $value['id'] ?>"
@@ -28,7 +29,8 @@
                                onClick="checkactive(<?= $key ?>);" <?= $value['estado'] == 0 ? 'checked' : '' ?>>
                         Desactivado</input></td>
                 </tr>
-            <?php endforeach ?>
+                <?php endforeach;
+            } ?>
         </table>
         <div class="row">
             <span><button class="btn btn-primary btn-block big-text-touch-button" onClick="addcc();" type="button">Nueva<br/>línea</button></span>

@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Informes de productividad</h1>
-    <?php if (isset($message)): ?>
+    <?php if (isset($message)) : ?>
         <div class="panel panel-danger">
             <div class="panel-heading">Aviso</div>
             <div class="panel-body"><?= $message ?></div>
@@ -8,23 +8,27 @@
     <?php endif ?>
     <form action="<?= base_url('/informes/usuario') ?>" method="post" accept-charset="utf-8" class="form-horizontal">
         <div class="col-md-8">
-            <?php if ($this->is_supervisor): ?>
+            <?php if ($this->is_supervisor) : ?>
                 <div class="col-md-6">
                     <p>Usuarios:</p>
                     <select multiple id="usuario" name="usuario[]" class="selectpicker" size="10">
                         <?php /* <option value="0">Seleccione un usuario</option> */ ?>
-                        <?php foreach ($usuarios as $user): ?>
+                        <?php foreach ($usuarios as $user) : ?>
                             <option value="<?= $user['id'] ?>" <?= $user['id'] == $usuario ? 'selected' : '' ?>><?= $user['username'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <p>Usuario: <input id="usuario" name="usuario" type="number" value="<?= $this->user_id ?>" readonly></p>
             <?php endif ?>
-            <?php if ($this->is_supervisor) echo '<div class="col-md-6">' ?>
+            <?php if ($this->is_supervisor) {
+                echo '<div class="col-md-6">';
+            } ?>
             <p>Desde: <input id="fechadesde" name="fechadesde" type="date" value="<?= $fechadesde ?>"></p>
             <p>Hasta: <input id="fechahasta" name="fechahasta" type="date" value="<?= $fechahasta ?>"></p>
-            <?php if ($this->is_supervisor) echo '</div>' ?>
+            <?php if ($this->is_supervisor) {
+                echo '</div>';
+            } ?>
         </div>
         <div class="col-md-4">
             <span><button name="aceptar" class="btn btn-primary btn-block big-text-touch-button"
@@ -33,9 +37,11 @@
     </form>
 </div>
 <div class="container">
-    <?php if (isset($informe) && $informe && count($informe) > 0): ?>
-        <?php if (!is_array($usuario)) $usuario = array($this->user_id); ?>
-        <?php if ($this->is_supervisor): ?>
+    <?php if (isset($informe) && $informe && count($informe) > 0) : ?>
+        <?php if (!is_array($usuario)) {
+            $usuario = array($this->user_id);
+        } ?>
+        <?php if ($this->is_supervisor) : ?>
             <a href="<?= base_url("informes/exportar/" . implode('-', $usuario) . "/$fechadesde/$fechahasta") ?>"
                target="_blank" class="btn btn-success">Exportar a CSV</a>
         <?php endif ?>
@@ -68,12 +74,14 @@
             //$minutos_s_e_c=0;
             ?>
             <?php //if ($informe && count($informe)>0): ?>
-            <?php foreach ($informe as $key => $value): ?>
+            <?php foreach ($informe as $key => $value) : ?>
                 <?php
 
-                if ($id_sec != $value['id_secuencia'] ||
+                if (
+                    $id_sec != $value['id_secuencia'] ||
                     $id_cc != $value['id_centrocosto'] ||
-                    $id_operador != $value['id_operador']) {
+                    $id_operador != $value['id_operador']
+                ) {
                     if ($id_sec != -1) {
                         echo "<tr><td colspan='7' align='right'>Total $sec ($minutos_fam minutos):</td><td>$contador_sec</td><td>Rep:</td><td>$contador_sec_rep<td>Fac:</td><td>$contador_sec_fac</td></tr>";
                     }
@@ -85,8 +93,10 @@
                     $sec = $value['secuencia'];
                 }
 
-                if ($id_cc != $value['id_centrocosto'] ||
-                    $id_operador != $value['id_operador']) {
+                if (
+                    $id_cc != $value['id_centrocosto'] ||
+                    $id_operador != $value['id_operador']
+                ) {
                     if ($id_cc != -1) {
                         echo "<tr><td colspan='7' align='right'>Total $cc ($minutos_cc minutos):</td><td>$contador_cc</td><td>Rep:</td><td>$contador_cc_rep<td>Fac:</td><td>$contador_cc_fac</td></tr>";
                     }
@@ -147,7 +157,7 @@
             echo "<tr><td colspan='7' align='right'>Total operador $id_operador ($minutos minutos):</td><td>$contador</td><td>Rep:</td><td>$contador_rep<td>Fac:</td><td>$contador_fac</td></tr>";
             ?>
         </table>
-    <?php else: ?>
+    <?php else : ?>
         <h3><?= isset($informe) ? 'No hay datos' : 'Revise los datos de la consulta y pulse en aceptar' ?></h3>
     <?php endif ?>
 </div>

@@ -8,11 +8,11 @@
                 <p>Nombre del cliente: <input id="nombre" name="nombre" type="text" value="<?= $nombre ?>"></p>
             </div>
             <div class="col-md-6">
-                <?php if ($alta): ?>
+                <?php if ($alta) : ?>
                     <button name="aceptar" class="btn btn-primary btn-block big-text-touch-button" type="submit">
                         Aceptar
                     </button>
-                <?php else: ?>
+                <?php else : ?>
                     <button name="cambiar" class="btn btn-success btn-block big-text-touch-button" type="submit">
                         Aceptar
                     </button>

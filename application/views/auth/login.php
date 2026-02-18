@@ -8,7 +8,9 @@
                          alt="">
                     <form class="form-signin">
                         <?php
-                        if (isset($message)) echo $message;
+                        if (isset($message)) {
+                            echo $message;
+                        }
                         echo form_error('username'); ?>
                         <input name="username" type="text" class="form-control"
                                value="<?php echo set_value('username') ?>"

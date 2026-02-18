@@ -1,1 +1,3 @@
-<?php var_dump($this->user); ?>
+<?php
+
+var_dump($this->user);

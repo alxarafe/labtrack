@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 define('FIRSTDAY', '1970-01-01');
 define('LASTDAY', '9999-12-31');
@@ -22,8 +26,7 @@ function get_date($_fecha)
     if ($_fecha == LASTDAY) {
         $ret = LASTDAY;
     } else {
-        if (strpos($_fecha, "/") == 2) // Si está en formato dd/mm/aa o dd/mm/aaaa...
-        {
+        if (strpos($_fecha, "/") == 2) { // Si está en formato dd/mm/aa o dd/mm/aaaa...
             $_fecha = implode("-", array_reverse(explode("/", $_fecha)));
         }
         $ret = date('Y-m-d', strtotime(str_replace("/", "-", date('Y-m-d', strtotime(str_replace("/", "-", $_fecha))))));
@@ -43,7 +46,6 @@ function str2money($money)
 
 abstract class MY_Model extends CI_Model
 {
-
     public $bbddStructure;
 
     function __construct()
@@ -70,9 +72,11 @@ abstract class MY_Model extends CI_Model
     {
         $this->loadStructure();
 
-        if (isset($this->bbddStructure))
-            foreach ($this->bbddStructure as $key => $table)
+        if (isset($this->bbddStructure)) {
+            foreach ($this->bbddStructure as $key => $table) {
                 $this->checkTable($key, $table, $crear);
+            }
+        }
     }
 
     abstract protected function loadStructure();
@@ -106,9 +110,7 @@ abstract class MY_Model extends CI_Model
                         $this->runqry($qry);
                     }
                 }
-
             }
-
         } elseif ($crear) {
             $this->crear_tabla($tablename, $table);
         } else {
@@ -136,28 +138,46 @@ abstract class MY_Model extends CI_Model
     {
         $type = $inStructure['Type'];
         /*
-        if (isset($inStructure['Size'])) {
-            $size = str_replace(".",",",$inStructure['Size']);
-            $type .= "(".$size.")";
-        }
-        */
+    if (isset($inStructure['Size'])) {
+        $size = str_replace(".",",",$inStructure['Size']);
+        $type .= "(".$size.")";
+    }
+    */
 
         /*
-        echo "<p>$FieldName</p>";
-        var_dump($inStructure);
-        */
+    echo "<p>$FieldName</p>";
+    var_dump($inStructure);
+    */
 
-        if (!isset($inStructure['Default'])) $inStructure['Default'] = Null;
-        if (!isset($inStructure['Extra'])) $inStructure['Extra'] = '';
-        if (!isset($inStructure['Key'])) $inStructure['Key'] = '';
-        if (!isset($inStructure['Null'])) $inStructure['Null'] = 'NO';
+        if (!isset($inStructure['Default'])) {
+            $inStructure['Default'] = null;
+        }
+        if (!isset($inStructure['Extra'])) {
+            $inStructure['Extra'] = '';
+        }
+        if (!isset($inStructure['Key'])) {
+            $inStructure['Key'] = '';
+        }
+        if (!isset($inStructure['Null'])) {
+            $inStructure['Null'] = 'NO';
+        }
 
         $cad = "";
-        if ($FieldName != $inTable['Field']) $cad .= "<p>Nombre: $FieldName != " . $inTable['Field'] . "</p>";
-        if ($type != $inTable['Type']) $cad .= "<p>Tipo: $type != " . $inTable['Type'] . "</p>";
-        if ($inStructure['Null'] != $inTable['Null']) $cad .= "<p>Null: " . $inStructure['Null'] . " != " . $inTable['Null'] . "</p>";
-        if ($inStructure['Default'] != $inTable['Default']) $cad .= "<p>Default: " . $inStructure['Default'] . " != " . $inTable['Default'] . "</p>";
-        if ($inStructure['Extra'] != $inTable['Extra']) $cad .= "<p>Extra: " . $inStructure['Extra'] . " != " . $inTable['Extra'] . "</p>";
+        if ($FieldName != $inTable['Field']) {
+            $cad .= "<p>Nombre: $FieldName != " . $inTable['Field'] . "</p>";
+        }
+        if ($type != $inTable['Type']) {
+            $cad .= "<p>Tipo: $type != " . $inTable['Type'] . "</p>";
+        }
+        if ($inStructure['Null'] != $inTable['Null']) {
+            $cad .= "<p>Null: " . $inStructure['Null'] . " != " . $inTable['Null'] . "</p>";
+        }
+        if ($inStructure['Default'] != $inTable['Default']) {
+            $cad .= "<p>Default: " . $inStructure['Default'] . " != " . $inTable['Default'] . "</p>";
+        }
+        if ($inStructure['Extra'] != $inTable['Extra']) {
+            $cad .= "<p>Extra: " . $inStructure['Extra'] . " != " . $inTable['Extra'] . "</p>";
+        }
 
         $result = ($cad == "");
         if (!$result) {
@@ -168,7 +188,8 @@ abstract class MY_Model extends CI_Model
     }
 
     public function changeColumn($tableName, $fieldName, $inStructure, $inTable)
-    { // No estoy muy seguro de que haga todo lo que tiene que hacer
+    {
+        // No estoy muy seguro de que haga todo lo que tiene que hacer
 
         echo "<pre>";
         print_r($inTable);
@@ -182,39 +203,41 @@ abstract class MY_Model extends CI_Model
         $result = "ALTER TABLE $tableName MODIFY $fieldName ";
 
         $result .= (isset($inStructure['Type']) ? $inStructure['Type'] : $inTable['Type']) . " ";
-        if (isset($inStructure['Key']) && $inStructure['Key'] != $inTable['Key']) $result .= ($_key == 'PRI' ? 'PRIMARY KEY ' : '');
+        if (isset($inStructure['Key']) && $inStructure['Key'] != $inTable['Key']) {
+            $result .= ($_key == 'PRI' ? 'PRIMARY KEY ' : '');
+        }
         $result .= ($_null == 'NO' ? "NOT " : "") . "NULL ";
         $result .= ($_def != "" ? "DEFAULT $_def " : "");
         $result .= $_extra;
 
 
         /*
-                if ((isset($inStructure['Default'])) && (!$this->compare_defaults($inTable['Default'], $inStructure['Default']))) {
-                    if (is_null($inTable['Default']))
-                        $result .= 'ALTER TABLE ' . $tableName . ' ALTER `' . $fieldName. '` DROP DEFAULT;';
-                    else {
-                        if( strtolower(substr($inStructure['Defecto'], 0, 9)) == "nextval('" ) { // nextval es para postgresql
-                            if($inTable['extra'] != 'auto_increment') {
-                                $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $inStructure['Field'] . '` ' . $inTable['Type'];
+            if ((isset($inStructure['Default'])) && (!$this->compare_defaults($inTable['Default'], $inStructure['Default']))) {
+                if (is_null($inTable['Default']))
+                    $result .= 'ALTER TABLE ' . $tableName . ' ALTER `' . $fieldName. '` DROP DEFAULT;';
+                else {
+                    if( strtolower(substr($inStructure['Defecto'], 0, 9)) == "nextval('" ) { // nextval es para postgresql
+                        if($inTable['extra'] != 'auto_increment') {
+                            $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $inStructure['Field'] . '` ' . $inTable['Type'];
 
-                                if($inTable['Null'] == 'YES')
-                                    $result .= ' NULL AUTO_INCREMENT;';
-                                else
-                                    $result .= ' NOT NULL AUTO_INCREMENT;';
-                            }
-                        }
-                        else
-                            $result .= 'ALTER TABLE ' . $tableName . ' ALTER `' . $fieldName . '` SET DEFAULT ' . $inStructure['Default'].";";
-
-                        if($inStructure['Null'] != $inTable['Null']) {
-                            if(strtolower($inStructure['Null']) == 'NO')
-                                $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $fieldName . '` ' . $inStructure['Type'] . ' NOT NULL;';
+                            if($inTable['Null'] == 'YES')
+                                $result .= ' NULL AUTO_INCREMENT;';
                             else
-                                $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $fieldName . '` ' . $inStructure['Type'] . ' NULL;';
+                                $result .= ' NOT NULL AUTO_INCREMENT;';
                         }
                     }
+                    else
+                        $result .= 'ALTER TABLE ' . $tableName . ' ALTER `' . $fieldName . '` SET DEFAULT ' . $inStructure['Default'].";";
+
+                    if($inStructure['Null'] != $inTable['Null']) {
+                        if(strtolower($inStructure['Null']) == 'NO')
+                            $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $fieldName . '` ' . $inStructure['Type'] . ' NOT NULL;';
+                        else
+                            $result .= 'ALTER TABLE ' . $tableName . ' MODIFY `' . $fieldName . '` ' . $inStructure['Type'] . ' NULL;';
+                    }
                 }
-        */
+            }
+    */
         // echo "<pre>[[[$result]]]</pre>";
         return $result;
     }
@@ -242,71 +265,80 @@ abstract class MY_Model extends CI_Model
             $consulta .= "(" . $size . ")";
         }
 
-        if (isset($col['Extra']) && ($col['Extra'] == 'auto_increment')) $consulta .= " AUTO_INCREMENT";
-        if (isset($col['Key']) && ($col['Key'] == 'PRI')) $consulta .= " PRIMARY KEY";
+        if (isset($col['Extra']) && ($col['Extra'] == 'auto_increment')) {
+            $consulta .= " AUTO_INCREMENT";
+        }
+        if (isset($col['Key']) && ($col['Key'] == 'PRI')) {
+            $consulta .= " PRIMARY KEY";
+        }
 
-        if (!isset($col['Null'])) $col['Null'] = "NO";
+        if (!isset($col['Null'])) {
+            $col['Null'] = "NO";
+        }
 
-        if ($col['Null'] == 'YES')
+        if ($col['Null'] == 'YES') {
             $consulta .= " NULL";
-        else
+        } else {
             $consulta .= " NOT NULL";
+        }
 
-        $defecto = isset($col['Default']) ? $col['Default'] : Null;
+        $defecto = isset($col['Default']) ? $col['Default'] : null;
         if (!($defecto === null)) {
             // echo "<pre>$index en $table_name no es null</pre>";
-            if (in_array($col['Type'], array("varchar", "text")))    // Si hay valor por defecto y es un literal
+            if (in_array($col['Type'], array("varchar", "text"))) {    // Si hay valor por defecto y es un literal
                 $defecto = "'$defecto'";                                            // Lo encerramos entre comillas
+            }
         }
         // else echo "<pre>$index en $table_name SI es null</pre>";
 
-        if (isset($col['Default']))
-            $consulta .= " DEFAULT '$defecto'"; /*
-		else if($col['null'] == 'YES')
-			$consulta .= " DEFAULT NULL"; */
+        if (isset($col['Default'])) {
+            $consulta .= " DEFAULT '$defecto'";
+        } elseif (isset($col['Null']) && $col['Null'] == 'YES') {
+            $consulta .= " DEFAULT NULL";
+        }
 
         $result = $consulta;
 
 
         /*
 
-                $_null	= (isset($inStructure['Null']))?$inStructure['Null']:$res_null=$inTable['Null'];
-                $_key	= (isset($inStructure['Key']))?$inStructure['Key']:$res_null=$inTable['Key'];
-                $_def	= (isset($inStructure['Default']))?$inStructure['Null']:$res_null=$inTable['Default'];
-                $_extra	= (isset($inStructure['Extra']))?$inStructure['Extra']:$res_null=$inTable['Extra'];
+        $_null  = (isset($inStructure['Null']))?$inStructure['Null']:$res_null=$inTable['Null'];
+        $_key   = (isset($inStructure['Key']))?$inStructure['Key']:$res_null=$inTable['Key'];
+        $_def   = (isset($inStructure['Default']))?$inStructure['Null']:$res_null=$inTable['Default'];
+        $_extra = (isset($inStructure['Extra']))?$inStructure['Extra']:$res_null=$inTable['Extra'];
 
-                $result = "ALTER TABLE $tableName ADD COLUMN $fieldName ";
+        $result = "ALTER TABLE $tableName ADD COLUMN $fieldName ";
 
-                $result.=(isset($inStructure['Type'])?		$inStructure['Type']:		$inTable['Type'])." ";
-                if ($inStructure['Key']!=$inTable['Key']) $result.=($_key=='PRI'?'PRIMARY KEY ':'');
-                $result.=($_null=='NO'?"NOT ":"")."NULL ";
-                $result.=($_def!=""?"DEFAULT $_def ":"");
-                $result.=$_extra;
-        */
+        $result.=(isset($inStructure['Type'])?      $inStructure['Type']:       $inTable['Type'])." ";
+        if ($inStructure['Key']!=$inTable['Key']) $result.=($_key=='PRI'?'PRIMARY KEY ':'');
+        $result.=($_null=='NO'?"NOT ":"")."NULL ";
+        $result.=($_def!=""?"DEFAULT $_def ":"");
+        $result.=$_extra;
+*/
 
         /*
-                $result = 'ALTER TABLE ' . $tableName . ' ADD `' . $fieldName . '` ';
+        $result = 'ALTER TABLE ' . $tableName . ' ADD `' . $fieldName . '` ';
 
-                if($inStructure['Type'] == 'SERIAL')
-                    $result .= '`' . '` INT NOT NULL AUTO_INCREMENT;'; // El campo de tipo serial, de momento no lo he probado
-                else {
-                    $result .= $inStructure['Type'];
+        if($inStructure['Type'] == 'SERIAL')
+            $result .= '`' . '` INT NOT NULL AUTO_INCREMENT;'; // El campo de tipo serial, de momento no lo he probado
+        else {
+            $result .= $inStructure['Type'];
 
-                    if (isset($inStructure['Size'])) {
-                        $result .= '('.$inStructure['Size'].')';
-                    }
+            if (isset($inStructure['Size'])) {
+                $result .= '('.$inStructure['Size'].')';
+            }
 
-                    if($inStructure['Null'] == 'NO')
-                        $result .= " NOT NULL";
-                    else
-                        $result .= " NULL";
+            if($inStructure['Null'] == 'NO')
+                $result .= " NOT NULL";
+            else
+                $result .= " NULL";
 
-                    if($inStructure['Default'])
-                        $result .= " DEFAULT ".$inStructure['Default'].";";
-                    else if($inStructure['Null'] == 'YES')
-                        $result .= " DEFAULT NULL;";
-                }
-        */
+            if($inStructure['Default'])
+                $result .= " DEFAULT ".$inStructure['Default'].";";
+            else if($inStructure['Null'] == 'YES')
+                $result .= " DEFAULT NULL;";
+        }
+*/
 
         return $result;
     }
@@ -317,9 +349,9 @@ abstract class MY_Model extends CI_Model
 
         $consulta = "CREATE TABLE " . $nombre . " ( ";
         foreach ($tabla['fields'] as $index => $col) {
-            if ($col['Type'] == 'serial')
+            if ($col['Type'] == 'serial') {
                 $consulta .= '`' . $index . '` INT NOT NULL AUTO_INCREMENT';
-            else {
+            } else {
                 $consulta .= '`' . $index . '` ' . $col['Type'];
 
                 if (isset($col['Size'])) {
@@ -327,36 +359,45 @@ abstract class MY_Model extends CI_Model
                     $consulta .= "(" . $size . ")";
                 }
 
-                if (isset($col['Extra']) && ($col['Extra'] == 'auto_increment')) $consulta .= " AUTO_INCREMENT";
-                if (isset($col['Key']) && ($col['Key'] == 'PRI')) $consulta .= " PRIMARY KEY";
+                if (isset($col['Extra']) && ($col['Extra'] == 'auto_increment')) {
+                    $consulta .= " AUTO_INCREMENT";
+                }
+                if (isset($col['Key']) && ($col['Key'] == 'PRI')) {
+                    $consulta .= " PRIMARY KEY";
+                }
 
-                if (!isset($col['Null'])) $col['Null'] = "NO";
+                if (!isset($col['Null'])) {
+                    $col['Null'] = "NO";
+                }
 
-                if ($col['Null'] == 'YES')
+                if ($col['Null'] == 'YES') {
                     $consulta .= " NULL";
-                else
+                } else {
                     $consulta .= " NOT NULL";
+                }
 
-                $defecto = isset($col['Default']) ? $col['Default'] : Null;
+                $defecto = isset($col['Default']) ? $col['Default'] : null;
                 if (!($defecto === null)) {
                     // echo "<pre>$index en $table_name no es null</pre>";
-                    if (in_array($col['Type'], array("varchar", "text")))    // Si hay valor por defecto y es un literal
+                    if (in_array($col['Type'], array("varchar", "text"))) {    // Si hay valor por defecto y es un literal
                         $defecto = "'$defecto'";                                            // Lo encerramos entre comillas
+                    }
                 }
                 // else echo "<pre>$index en $table_name SI es null</pre>";
 
-                if (isset($col['Default']))
-                    $consulta .= " DEFAULT " . $defecto; /*
-				else if($col['null'] == 'YES')
-					$consulta .= " DEFAULT NULL"; */
+                if (isset($col['Default'])) {
+                    $consulta .= " DEFAULT " . $defecto;
+                } elseif (isset($col['Null']) && $col['Null'] == 'YES') {
+                    $consulta .= " DEFAULT NULL";
+                }
 
                 $consulta .= ', ';
             }
         }
 
         // Agregamos clave primaria
-        $tablePKeys = isset($tabla['keys']) ? $tabla['keys'] : Null;
-        if ($tablePKeys === Null) {
+        $tablePKeys = isset($tabla['keys']) ? $tabla['keys'] : null;
+        if ($tablePKeys === null) {
             $consulta = substr($consulta, 0, -2); // Quitamos la coma y el espacio del final
         } else {
             $consulta .= " INDEX (";
@@ -371,7 +412,7 @@ abstract class MY_Model extends CI_Model
 
         $this->runqry($consulta);
 
-        $values = isset($tabla['values']) ? $tabla['values'] : Null;
+        $values = isset($tabla['values']) ? $tabla['values'] : null;
         if (isset($values)) {
             echo "<p>Agregando valores por defecto</p>";
             $consulta = "INSERT INTO $nombre ";
@@ -404,13 +445,15 @@ abstract class MY_Model extends CI_Model
 
     function record_exists($fichero, $buscar, $mas = null)
     {
-        $ret = Null;
+        $ret = null;
         $consulta = "";
         foreach ($buscar as $key => $value) {
             $consulta .= ($consulta == "" ? "$key = $value" : " AND $key = $value");
         }
 
-        if (isset($mas)) $consulta .= $mas;
+        if (isset($mas)) {
+            $consulta .= $mas;
+        }
 
         if ($consulta != "") {
             if ($result = $this->db->query("SELECT id FROM $fichero WHERE $consulta")) {
@@ -425,7 +468,7 @@ abstract class MY_Model extends CI_Model
 
     function search_in($fichero, $buscar, $create = false)
     {
-        $ret = Null;
+        $ret = null;
         $claves = '';
         $valores = '';
         $consulta = '';
@@ -439,7 +482,7 @@ abstract class MY_Model extends CI_Model
                 if ($result->num_rows > 0) {
                     $row = $result->result_array();
                     $ret = $row[0]['id'];
-                } else if ($create) {
+                } elseif ($create) {
                     $sql = "INSERT INTO $fichero ($claves) VALUES ($valores)";
                     if ($result = $this->db->query($sql)) {
                         $ret = $this->db->insert_id();
@@ -452,7 +495,7 @@ abstract class MY_Model extends CI_Model
 
     function get_it($fichero, $_dato, $create = false, $campo = 'name')
     {
-        $ret = Null;
+        $ret = null;
         $_dato = trim($_dato);
 
         $sql = "SELECT id FROM $fichero WHERE $campo='$_dato'";
@@ -461,7 +504,7 @@ abstract class MY_Model extends CI_Model
             if ($result = $this->qry2array($sql)) {
                 if ($result) {
                     $ret = $result[0]['id'];
-                } else if ($create) {
+                } elseif ($create) {
                     $sql = "INSERT INTO $fichero ($campo) VALUES ('$_dato')";
                     if ($result = $this->db->query($sql)) {
                         $ret = $this->db->insert_id();
@@ -496,7 +539,7 @@ abstract class MY_Model extends CI_Model
             $fquery .= ($fquery == "" ? "$key = $value" : ", $key = $value");
         }
 
-        $ret = Null;
+        $ret = null;
         if ($kfields != "") {
             //$sql="SELECT $kfields FROM $fichero WHERE $kquery";
             $sql = "SELECT * FROM $fichero WHERE $kquery";
@@ -516,8 +559,9 @@ abstract class MY_Model extends CI_Model
                     $checkdata = $_checkdata[0];
                     foreach ($_fields as $key => $thefield) {
                         $field = strtolower(trim($thefield, ' \'\"'));
-                        if ($field != strtolower($checkdata[$key]))
+                        if ($field != strtolower($checkdata[$key])) {
                             $this->auth_model->log_entry(LOG_CHG_DATA, addslashes("$infoname: $fichero.$key, de $checkdata[$key] a $field"));
+                        }
                     }
 
                     $result = $this->db->query($sql);
@@ -529,7 +573,9 @@ abstract class MY_Model extends CI_Model
                         $ret = false;
                         if (($result = $this->db->query($sql)) && ($result->num_rows > 0)) {
                             $res = $result->result_array();
-                            if ((count($res) > 0) && (isset($res[0]['id']))) $ret = $res[0]['id'];
+                            if ((count($res) > 0) && (isset($res[0]['id']))) {
+                                $ret = $res[0]['id'];
+                            }
                         }
                     }
                 } else {
@@ -559,7 +605,7 @@ abstract class MY_Model extends CI_Model
             $kquery .= ($kquery == "" ? "$key = $value" : " AND $key = $value");
         }
 
-        $ret = Null;
+        $ret = null;
         if ($kquery != "") {
             $sql = "DELETE FROM $fichero WHERE $kquery";
             $ret = $this->db->query($sql);

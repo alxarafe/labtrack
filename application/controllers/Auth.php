@@ -1,11 +1,12 @@
-<?php defined("BASEPATH" or die("El acceso al script no está permitido"));
+<?php
+
+defined("BASEPATH" or die("El acceso al script no está permitido"));
 
 define('SENDER_NAME', _APPNAME);
 define('SENDER_EMAIL', 'info@rsanjoseo.com');
 
 class Auth extends MY_Controller
 {
-
 // public static $PROVIDERS;
 
     function __construct()
@@ -41,7 +42,7 @@ class Auth extends MY_Controller
     public function user_mail_check($str)
     {
         if (($str == $this->user['username']) || ($str == $this->user['email'])) {
-            return TRUE;
+            return true;
         } else {
             $user = $this->auth_model->get_user_by_name($this->auth_model->get_user($str));
             return ($user == false);
@@ -73,13 +74,12 @@ class Auth extends MY_Controller
             //$this->form_validation->set_rules('password', lang('form_password'), 'required|trim|password|xss_clean');
 
             /*
-            $this->form_validation->set_message('required',		lang('form_required'));
-            $this->form_validation->set_message('min_length',	lang('form_min_length'));
-            $this->form_validation->set_message('max_length',	lang('form_max_length'));
+            $this->form_validation->set_message('required',     lang('form_required'));
+            $this->form_validation->set_message('min_length',   lang('form_min_length'));
+            $this->form_validation->set_message('max_length',   lang('form_max_length'));
             */
 
             if ($this->form_validation->run()) {
-
                 $user = strtolower($this->input->post('username'));
                 $pass = $this->input->post('password');
 
@@ -95,7 +95,7 @@ class Auth extends MY_Controller
                         if ($this->input->post('remember-me')) {
                             $this->set_cookie(COOKIE_USER_ID, $id_user, 30 * (24 * 60 * 60));
                         } else {
-                            $this->set_cookie(COOKIE_USER_ID, $id_user, 60*60);    // De existir una cookie, se elimina
+                            $this->set_cookie(COOKIE_USER_ID, $id_user, 60 * 60);    // De existir una cookie, se elimina
                         }
 
                         //$this->data['username'] = $user;
@@ -106,16 +106,19 @@ class Auth extends MY_Controller
                         redirect('/', 'refresh');
                     } else {
                         $page = 'auth/login';
-                        if ($_user = $this->auth_model->get_mail_and_token($user, $pass))
+                        if ($_user = $this->auth_model->get_mail_and_token($user, $pass)) {
                             if (count($_user) > 0) {
                                 $__user = $_user[0];
                                 $this->send_activation_mail($__user['email'], $user, $__user['auth_code']);
                                 $this->data['message'] = lang('auth_user_not_activated');
                                 $this->auth_model->log_entry(LOG_LOGIN_USER_NOT_ACTIVATED, "Login fail! User $user not activated");
                             }
+                        }
                     }
                 } else {
-                    if (ENVIRONMENT == 'development') echo "[$user=$pass(" . md5($pass) . ")]";
+                    if (ENVIRONMENT == 'development') {
+                        echo "[$user=$pass(" . md5($pass) . ")]";
+                    }
                     $this->data['message'] = lang('auth_user_not_authenticated');
                     $page = 'auth/login';
                     $this->auth_model->log_entry(LOG_LOGIN_FAILED, "Login fail! User $user");
@@ -156,8 +159,9 @@ class Auth extends MY_Controller
 
         $this->email->from(SENDER_EMAIL, SENDER_NAME);
         $this->email->to($email);
-        if (ENVIRONMENT == 'development')
+        if (ENVIRONMENT == 'development') {
             $this->email->cc('r_sanjose@hotmail.com');
+        }
 
         $this->email->subject($subject);
 
@@ -178,14 +182,16 @@ class Auth extends MY_Controller
         $this->email->message($message);
         $result = $this->email->send();
 
-        if (ENVIRONMENT == 'development')
+        if (ENVIRONMENT == 'development') {
             echo $this->email->print_debugger();
+        }
 
         return $result;
     }
 
     function newuser()
-    {    // Alta de usuario
+    {
+    // Alta de usuario
         $pagina = 'contact';
 
         /*
@@ -227,10 +233,10 @@ class Auth extends MY_Controller
         $this->load->view('templates/footer', $this->data);
     }
 
-    function reset($user = Null, $auth = Null)
-    {    // Reinicio de contraseña
-        if ($user)    // Se ha pasado un usuario, si ok, pedir contraseña
-        {
+    function reset($user = null, $auth = null)
+    {
+    // Reinicio de contraseña
+        if ($user) {    // Se ha pasado un usuario, si ok, pedir contraseña
             $pagina = 'newpassword';
             $this->data['user'] = $user;
             $this->data['auth'] = $auth;
@@ -257,7 +263,7 @@ class Auth extends MY_Controller
                 $pagina = 'userpswlost';
                 $this->auth_model->log_entry(LOG_PASSWORD_TOKEN_ERROR, "$user password recovery token error");
             }
-        } else    // Si no se ha pasado usuario, hay que pedir usuario o mail para reenviar enlace
+        } else // Si no se ha pasado usuario, hay que pedir usuario o mail para reenviar enlace
         {
             $this->form_validation->set_rules('mail_name', lang('form_user_or_email'), 'trim|required');
             $pagina = 'userpswlost';
@@ -272,7 +278,6 @@ class Auth extends MY_Controller
 
                 if ($username && $email) {
                     if ($this->auth_model->user_new_auth($username, $tokenauth)) {
-
                         $to = $email;
                         $url = base_url() . $this->lang->lang() . "/auth/reset/$username/$tokenauth";
                         $subject = lang('auth_email_password');
@@ -300,7 +305,7 @@ class Auth extends MY_Controller
         $this->load->view('templates/footer', $this->data);
     }
 
-    function conf($username = Null, $token = Null)
+    function conf($username = null, $token = null)
     {
         $pagina = "login";
 
@@ -334,7 +339,9 @@ class Auth extends MY_Controller
 
         $page = "edit";
 
-        if (!$_username && isset($this->user)) $_username = $this->user['username'];
+        if (!$_username && isset($this->user)) {
+            $_username = $this->user['username'];
+        }
 
         if ($_username && ($this->user['username'] == $_username) || $this->is_admin) {
             $this->data['user'] = $this->auth_model->get_user_by_name($_username);
@@ -351,7 +358,6 @@ class Auth extends MY_Controller
         $this->form_validation->set_rules('fastaccess', 'Acceso rápido', "trim|numeric|min_length[0]|max_length[13]|callback_fastaccess_check");
 
         if ($this->form_validation->run()) {
-
             $username = strtolower($this->input->post('username'));
             $password = ($this->input->post('newpassword') == "" ? $this->input->post('password') : $this->input->post('newpassword'));
             $email = $this->input->post('email');
@@ -378,7 +384,9 @@ class Auth extends MY_Controller
     {
         $page = "log";
 
-        if (!$_username && isset($this->user)) $_username = $this->user['username'];
+        if (!$_username && isset($this->user)) {
+            $_username = $this->user['username'];
+        }
 
         if ($_username && ($this->user['username'] == $_username) || $this->is_admin) {
             $this->data['user'] = $this->auth_model->get_user_by_name($_username);
@@ -400,12 +408,12 @@ class Auth extends MY_Controller
             $this->auth_model->log_entry(LOG_LOGOUT, "Logout: $user disconnected!");
             $this->data['message'] = lang('auth_logout');
         }
-        $this->set_cookie(COOKIE_USER_ID, Null, 0);    // De existir una cookie, se elimina
-        $this->session->set_userdata('user_id', Null);
+        $this->set_cookie(COOKIE_USER_ID, null, 0);    // De existir una cookie, se elimina
+        $this->session->set_userdata('user_id', null);
         //$this->session->set_userdata('social_id', Null);
 
-        $this->user = Null;
-        $this->is_admin = False;
+        $this->user = null;
+        $this->is_admin = false;
 
         $this->load->view('templates/header', $this->data);
         $this->load->view("auth/fastaccess", $this->data);

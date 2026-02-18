@@ -32,7 +32,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <?php if (ENVIRONMENT == "production" || ENVIRONMENT == "testing"): // Sólo si estamos en producción, metemos la información de Analytics ?>
+    <?php if (ENVIRONMENT == "production" || ENVIRONMENT == "testing") : // Sólo si estamos en producción, metemos la información de Analytics ?>
         <script>
             (function (i, s, o, g, r, a, m) {
                 i['GoogleAnalyticsObject'] = r;
@@ -67,11 +67,11 @@
             <ul class="nav navbar-nav">
                 <li<?= $this->uri->segment(1) == '' ? ' class="active"' : ''; ?>><a
                             href="<?= site_url('/') ?>">Inicio</a></li>
-                <?php if ($this->is_admin): ?>
+                <?php if ($this->is_admin) : ?>
                     <li<?= $this->uri->segment(1) == 'configuracion' ? ' class="active"' : ''; ?>><a
                                 href="<?= site_url('/configuracion') ?>">Configuración</a></li>
                 <?php endif ?>
-                <?php if ($this->is_supervisor): ?>
+                <?php if ($this->is_supervisor) : ?>
                     <li<?= $this->uri->segment(1) == 'supervision' ? ' class="active"' : ''; ?>><a
                                 href="<?= site_url('/supervision') ?>">Supervisión</a></li>
                 <?php endif ?>

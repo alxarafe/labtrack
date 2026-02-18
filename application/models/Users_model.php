@@ -1,11 +1,11 @@
 <?php
+
 define('LOG_CHG_USER', 20);
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Users_model extends MY_Model
 {
-
     public function loadStructure()
     {
     }
@@ -24,14 +24,16 @@ LEFT OUTER JOIN user_roles c ON a.id=c.user_id AND c.role_id=2
     {
         $_roles = $this->qry2array("SELECT role_id FROM user_roles WHERE user_id=$id");
         $roles = array();
-        if ($_roles)
-            foreach ($_roles as $rol)
+        if ($_roles) {
+            foreach ($_roles as $rol) {
                 $roles[$rol['role_id']] = 1;
+            }
+        }
         $result = array();
         foreach (unserialize(USER_ROLES) as $key => $value) {    // Unserialize sólo es necesario en PHP v5. PHP v7 permite definir la constante como array
             $x = unserialize(USER_ROLES);    // PHP v5
             $result[$key] = array(
-                'name' => $x[$key], //'name'=>USER_ROLES[$key],	// Sólo PHP v5
+                'name' => $x[$key], //'name'=>USER_ROLES[$key], // Sólo PHP v5
                 'active' => isset($roles[$key]) ? 1 : 0
             );
         }
@@ -40,9 +42,13 @@ LEFT OUTER JOIN user_roles c ON a.id=c.user_id AND c.role_id=2
 
     function change_user_id($oldid, $newid)
     {
-        if ($oldid == $newid) return true;
+        if ($oldid == $newid) {
+            return true;
+        }
         $exists = $this->get_username_by_id($newid);
-        if ($exists) die("Ya existe el usuario con id $newid");
+        if ($exists) {
+            die("Ya existe el usuario con id $newid");
+        }
 
         $this->runqry("UPDATE log_file SET user_id=$newid WHERE user_id=$oldid");
         $this->runqry("UPDATE movimientos SET id_operador=$newid WHERE id_operador=$oldid");
@@ -55,7 +61,7 @@ LEFT OUTER JOIN user_roles c ON a.id=c.user_id AND c.role_id=2
     {
         $query = $this->db->query("SELECT username FROM users WHERE id=$user_id");
         $result = $query->result_array();
-        $user = Null;
+        $user = null;
         if (count($result) > 0) {
             $user = $result[0]['username'];
         }
@@ -91,5 +97,4 @@ LEFT OUTER JOIN user_roles c ON a.id=c.user_id AND c.role_id=2
 
         $this->auth_model->log_entry(LOG_CHG_USER, "$nombre: Usuario eliminado");
     }
-
 }

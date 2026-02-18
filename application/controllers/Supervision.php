@@ -1,13 +1,16 @@
-<?php defined("BASEPATH" or die("El acceso al script no está permitido"));
+<?php
+
+defined("BASEPATH" or die("El acceso al script no está permitido"));
 
 class Supervision extends MY_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
 
-        if (!$this->is_supervisor) redirect('/');
+        if (!$this->is_supervisor) {
+            redirect('/');
+        }
         $this->public_page = false;
 
         $this->data['title'] = 'Supervisión de movimientos';
@@ -71,9 +74,10 @@ class Supervision extends MY_Controller
             if ($this->data['expediente']) {
                 $this->data['movimientos'] = $this->protesis_model->get_movimientos($_POST['orden'], true);    // true descendente
             } else {
-                if (isset($orden)) $this->data['message'] = "La orden $orden no está dada de alta";
+                if (isset($orden)) {
+                    $this->data['message'] = "La orden $orden no está dada de alta";
+                }
             }
-
         }
 
         if (isset($_POST['guardar'])) {
@@ -106,7 +110,9 @@ class Supervision extends MY_Controller
 
         return;
 
-        if (!isset($id_movimiento) && isset($_POST['id_movimiento'])) $id_movimiento = $_POST['id_movimiento'];
+        if (!isset($id_movimiento) && isset($_POST['id_movimiento'])) {
+            $id_movimiento = $_POST['id_movimiento'];
+        }
         if (isset($id_movimiento)) {
             if (isset($_POST['borrar'])) {
                 $this->protesis_model->delete_data(
@@ -123,8 +129,8 @@ class Supervision extends MY_Controller
         }
 
         if (isset($_POST['cancelar'])) {
-            $this->set_cookie(COOKIE_USER_ID, Null, 0);    // De existir una cookie, se elimina
-            $this->session->set_userdata('user_id', Null);
+            $this->set_cookie(COOKIE_USER_ID, null, 0);    // De existir una cookie, se elimina
+            $this->session->set_userdata('user_id', null);
             redirect('/');
         }
 
@@ -175,15 +181,23 @@ class Supervision extends MY_Controller
                 );
             }
 
-            if (isset($_POST['guardar'])) redirect('/');
-            if (isset($_POST['repetir'])) redirect("/ordenes/repetir/$id_centro/$id_familia/$id_proceso/$id_secuencia");
+            if (isset($_POST['guardar'])) {
+                redirect('/');
+            }
+            if (isset($_POST['repetir'])) {
+                redirect("/ordenes/repetir/$id_centro/$id_familia/$id_proceso/$id_secuencia");
+            }
         }
 
-        if (!isset($orden) && isset($_POST['orden'])) $orden = $_POST['orden'];
+        if (!isset($orden) && isset($_POST['orden'])) {
+            $orden = $_POST['orden'];
+        }
 
         if (isset($orden) && ($orden != '')) {
-            if ($orden == 0 || // Estamos en un guardar y repetir...
-                $this->data['orden'] = $this->protesis_model->get_orden($orden)) {
+            if (
+                $orden == 0 || // Estamos en un guardar y repetir...
+                $this->data['orden'] = $this->protesis_model->get_orden($orden)
+            ) {
                 $this->data['centro'] = $id_centro;
                 //$this->data['familia']=$id_familia;
 
@@ -196,7 +210,9 @@ class Supervision extends MY_Controller
                     $this->data['familia'] = $this->protesis_model->get_familia($id_familia);
                     $this->data['procesos'] = $this->protesis_model->get_procesos_de_la_familia($id_familia);
                 } else {
-                    if (isset($id_centro)) $this->data['familias'] = $this->protesis_model->get_familia_del_centro($id_centro);
+                    if (isset($id_centro)) {
+                        $this->data['familias'] = $this->protesis_model->get_familia_del_centro($id_centro);
+                    }
                 }
 
                 if ($orden == 0) {
@@ -212,16 +228,19 @@ class Supervision extends MY_Controller
                 $this->data['orden'] = $orden;
             }
         } else {
-            if (isset($orden)) $this->data['message'] = 'Introduzca el número de orden';
+            if (isset($orden)) {
+                $this->data['message'] = 'Introduzca el número de orden';
+            }
             $page = 'index';
         }
 
-        if (isset($centro)) $this->data['centro'] = $centro;
+        if (isset($centro)) {
+            $this->data['centro'] = $centro;
+        }
 
         $this->load->view('templates/header', $this->data);
         $this->load->view('ordenes/' . $page, $this->data);
         $this->load->view('templates/footer');
-
     }
 
 
@@ -232,7 +251,7 @@ class Supervision extends MY_Controller
 
         if (isset($_POST['cancelar']))
         {
-            $this->set_cookie(COOKIE_USER_ID, Null, 0);	// De existir una cookie, se elimina
+            $this->set_cookie(COOKIE_USER_ID, Null, 0); // De existir una cookie, se elimina
             $this->session->set_userdata('user_id', Null);
             redirect('/');
         }
@@ -270,9 +289,13 @@ class Supervision extends MY_Controller
 
     function itemorden($orden/*, $centro*/)
     {
-        if (isset($_POST['cancelar'])) redirect('ordenes');
+        if (isset($_POST['cancelar'])) {
+            redirect('ordenes');
+        }
 
-        if (!$exp = $this->protesis_model->get_orden($orden)) redirect('ordenes');
+        if (!$exp = $this->protesis_model->get_orden($orden)) {
+            redirect('ordenes');
+        }
 
         $this->data['orden'] = $exp;
         //$this->data['centro']=$centro;
@@ -280,8 +303,12 @@ class Supervision extends MY_Controller
         $this->data['subfamilias'] = $this->protesis_model->get_subfamilias();
 
         //if (!isset($_POST['centrocosto'])) $_POST['centrocosto']=$this->data['centros'][0]['id'];
-        if (!isset($_POST['familia'])) $_POST['familia'] = $this->data['familias'][0]['id'];
-        if (!isset($_POST['subfamilia'])) $_POST['subfamilia'] = $this->data['subfamilias'][0]['id'];
+        if (!isset($_POST['familia'])) {
+            $_POST['familia'] = $this->data['familias'][0]['id'];
+        }
+        if (!isset($_POST['subfamilia'])) {
+            $_POST['subfamilia'] = $this->data['subfamilias'][0]['id'];
+        }
 
         $page = 'itemorden';
         $id_subfamilia = $this->protesis_model->get_subfamilia($_POST['familia'], $_POST['subfamilia']);
@@ -305,8 +332,12 @@ class Supervision extends MY_Controller
         $this->data['secuencias'] = $this->protesis_model->get_secuencias($orden);
 
         $message = '';
-        if (!$id_subfamilia) $message = 'Seleccione una familia y una subfamilia' . ($message == '' ? '' : '<br />');
-        if ($message != '') $this->data['message'] = $message;
+        if (!$id_subfamilia) {
+            $message = 'Seleccione una familia y una subfamilia' . ($message == '' ? '' : '<br />');
+        }
+        if ($message != '') {
+            $this->data['message'] = $message;
+        }
 
         $this->load->view('templates/header', $this->data);
         $this->load->view('ordenes/' . $page, $this->data);
@@ -349,9 +380,11 @@ class Supervision extends MY_Controller
 
     function edit($id /*, $centro */)
     {
-        if (isset($_POST['cancelar'])) redirect('ordenes');
+        if (isset($_POST['cancelar'])) {
+            redirect('ordenes');
+        }
 
-        if (isset($_POST['aceptar']))
+        if (isset($_POST['aceptar'])) {
             $this->protesis_model->save_data(
                 'ordenes',
                 array('id' => $id),
@@ -360,17 +393,22 @@ class Supervision extends MY_Controller
                     'nombre' => "'" . $_POST['nombre'] . "'",
                 )
             );
+        }
         //redirect("/ordenes/index/$id/$centro");
         redirect("/ordenes/index/$id");
     }
 
-    public function _edit($id = Null)
+    public function _edit($id = null)
     {
-        if (isset($_POST['cancelar'])) redirect('productos');
+        if (isset($_POST['cancelar'])) {
+            redirect('productos');
+        }
 
         if ($id) {
             $p = $this->protesis_model->get_producto($id);
-            if (!$p) redirect('/productos');    // Vaya "algo" ha pasado que no he podido recuperar el producto solicitado
+            if (!$p) {
+                redirect('/productos');    // Vaya "algo" ha pasado que no he podido recuperar el producto solicitado
+            }
             $this->protect_close = true;
         } else {
             $id = $this->protesis_model->next_id('productos');
@@ -460,7 +498,9 @@ class Supervision extends MY_Controller
     public function import()
     {
         return;
-        if (!$this->is_admin) redirect('familias');
+        if (!$this->is_admin) {
+            redirect('familias');
+        }
 
         $dir = "import/";
         $ffile = "familias.csv";
@@ -469,7 +509,9 @@ class Supervision extends MY_Controller
 
         if (is_dir($dir)) {
             if (file_exists($dir . $ffile) && file_exists($dir . $sfile) && file_exists($dir . $cfile)) {
-                if (ENVIRONMENT == 'development') $this->protesis_model->truncate_familias();
+                if (ENVIRONMENT == 'development') {
+                    $this->protesis_model->truncate_familias();
+                }
 
                 // INCORPORACIÓN DEL FICHERO DE FAMILIAS
 
@@ -478,7 +520,7 @@ class Supervision extends MY_Controller
                 // Se lee la cabecera y se toman los nombres en el array $names
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -519,7 +561,7 @@ class Supervision extends MY_Controller
                 $fp = fopen($dir . $sfile, "r");
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -561,7 +603,7 @@ class Supervision extends MY_Controller
                 $fp = fopen($dir . $cfile, "r");
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -599,9 +641,8 @@ class Supervision extends MY_Controller
             } else {
                 echo "No existen archivos $cfile o $dfile en $dir";
             }
-
-        } else
+        } else {
             echo "No se encuentra el directorio $dir";
+        }
     }
-
 }

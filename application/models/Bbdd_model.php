@@ -1,4 +1,5 @@
 <?php
+
 defined("BASEPATH") or die("El acceso al script no está permitido");
 
 class Bbdd_model extends MY_Model
@@ -10,7 +11,7 @@ class Bbdd_model extends MY_Model
 
     public function loadStructure()
     {
-        $this->bbddStructure = NULL;
+        $this->bbddStructure = null;
     }
 
     /*

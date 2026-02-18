@@ -1,12 +1,12 @@
 <div class="container">
     <h1>Gestión de usuarios</h1>
-    <?php if (isset($message)): ?>
+    <?php if (isset($message)) : ?>
         <div class="panel panel-danger">
             <div class="panel-heading">Aviso</div>
             <div class="panel-body"><?= $message ?></div>
         </div>
     <?php endif ?>
-    <?php if (!$usuarios): ?>
+    <?php if (!$usuarios) : ?>
         <h2>Aún no hay datos</h2>
     <?php endif ?>
     <form action="<?= base_url('/configuracion/usuarios') ?>" method="post" accept-charset="utf-8"
@@ -21,7 +21,8 @@
                 <td>Supervisor</td>
                 <td>Estado</td>
             </tr>
-            <?php if ($usuarios) foreach ($usuarios as $key => $value): ?>
+            <?php if ($usuarios) {
+                foreach ($usuarios as $key => $value) : ?>
                 <tr id="fila<?= $key ?>"
                     class="<?= $value['active'] > 0 ? ($value['active'] == 1 ? 'success' : 'active') : 'danger' ?>">
                     <td><input id="oldid<?= $key ?>" name="oldid[<?= $key ?>]"
@@ -31,8 +32,8 @@
                     <td><input id="nombre<?= $key ?>" name="nombre[<?= $key ?>]" value="<?= $value['username'] ?>"/>
                     </td>
                     <!--
-		<td><input id="fastaccess<?= $key ?>" name="fastaccess[<?= $key ?>]" value="<?= $value['fastaccess'] ?>" /></td>
-		-->
+        <td><input id="fastaccess<?= $key ?>" name="fastaccess[<?= $key ?>]" value="<?= $value['fastaccess'] ?>" /></td>
+        -->
                     <td><input id="admin<?= $key ?>" type="checkbox" name="admin[<?= $key ?>]"
                                value="<?= $value['admin'] ?>" <?= $value['admin'] == 0 ? '' : 'checked' ?>>
                         Administrador</input></td>
@@ -44,7 +45,8 @@
                                onClick="checkactive(<?= $key ?>);" <?= $value['active'] == 0 ? 'checked' : '' ?>>
                         Desactivado</input></td>
                 </tr>
-            <?php endforeach ?>
+                <?php endforeach;
+            } ?>
         </table>
         <div class="row">
             <span><button class="btn btn-primary btn-block big-text-touch-button" onClick="addusr();" type="button">Nueva<br/>línea</button></span>

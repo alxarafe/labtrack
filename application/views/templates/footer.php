@@ -14,7 +14,7 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<?php echo site_url("js/ie10-viewport-bug-workaround.js") ?>"></script>
 <?php
-/* 
+/*
 Como por velocidad se cargan los js al final, tenemos un problema a la hora de generar los mapas, ya que cualquier comando que se
 ejecute antes de cargar las librerías no va a funcionar. No puedo cargar los mapas antes porque necesitan jquery.
 
@@ -39,7 +39,9 @@ if (isset($js)) {
 if (isset($php)) {
     foreach ($php as $script) {
         $file = 'includes/' . $script . '.php';
-        if (file_exists($file)) include($file);
+        if (file_exists($file)) {
+            include($file);
+        }
     }
 }
 

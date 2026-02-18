@@ -2,7 +2,6 @@
 
 class Index extends MY_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -41,5 +40,4 @@ class Index extends MY_Controller
         $this->load->view('auth/' . $page, $this->data);
         $this->load->view('templates/footer', $this->data);
     }
-
 }

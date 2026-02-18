@@ -1,5 +1,5 @@
 <div class="container">
-    <?php if (isset($message)): ?>
+    <?php if (isset($message)) : ?>
         <div class="panel panel-danger">
             <div class="panel-heading">Aviso</div>
             <div class="panel-body"><?= $message ?></div>
@@ -9,7 +9,7 @@
         <div class="panel-heading">Indique un número de orden para <strong>repetir la secuencia</strong>.</div>
         <div class="panel-body">
             <div class="row">
-                <?php foreach ($centros as $value): ?>
+                <?php foreach ($centros as $value) : ?>
                     <span><span class="btn btn-<?= $centro == $value['id'] ? 'info' : 'default' ?> btn-block touch-button"><?= $value['nombre_boton'] ?></span></span>
                 <?php endforeach ?>
                 <span><a href="<?= base_url('ordenes') ?>"
@@ -26,11 +26,11 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row col-md-8">
-                                    <?php if ($expediente): ?>
+                                    <?php if ($expediente) : ?>
                                         <p>Nº de órden: <strong><?= $orden . ' ' . $expediente['nombre'] ?></strong>
                                             <input id="orden" name="orden" type="text" value="<?= $orden ?>" hidden/>
                                         </p>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <p>Nº de órden: <input id="orden" name="orden" type="text"
                                                                value="<?= isset($orden) ? $orden : '' ?>" autofocus/>
                                         </p>
@@ -53,12 +53,12 @@
                                     </div>
                                 </div>
                                 <div class="row col-md-4">
-                                    <?php if ($expediente): ?>
+                                    <?php if ($expediente) : ?>
                                         <button name="guardar" class="btn btn-primary btn-block" type="submit">Aceptar
                                         </button>
                                         <button name="volver" class="btn btn-danger btn-block" type="submit">Volver
                                         </button>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <button name="buscar" class="btn btn-primary btn-block" type="submit">Buscar
                                         </button>
                                     <?php endif ?>
@@ -81,18 +81,20 @@
                                 <th>ud</th>
                                 <th>op</th>
                                 <th>fecha</th>
-                                <?php if ($this->is_admin) echo '<th>min</th>' ?>
+                                <?php if ($this->is_admin) {
+                                    echo '<th>min</th>';
+                                } ?>
                                 <th>rep</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php if (isset($movimientos) && $movimientos) foreach ($movimientos as $value): ?>
-
+                            <?php if (isset($movimientos) && $movimientos) {
+                                foreach ($movimientos as $value) : ?>
                                 <tr>
                                     <td>
-                                        <?php if ($value['notas'] == ''): ?>
+                                        <?php if ($value['notas'] == '') : ?>
                                             &nbsp;
-                                        <?php else: ?>
+                                        <?php else : ?>
                                             <span title="<?= $value['notas'] ?>"><span
                                                         class="glyphicon glyphicon-exclamation-sign"
                                                         aria-hidden="true"></span></span>
@@ -102,10 +104,13 @@
                                     <td><?= $value['unidades']; ?></td>
                                     <td><?= $value['id_operador']; ?></td>
                                     <td><?= date('d-m-Y H:i', strtotime($value['hora'])); ?></td>
-                                    <?php if ($this->is_admin) echo '<td align="right">' . $value['duracion'] . '</td>' ?>
+                                    <?php if ($this->is_admin) {
+                                        echo '<td align="right">' . $value['duracion'] . '</td>';
+                                    } ?>
                                     <td><?= $value['repetido'] == 1 ? 'Rep' : ($value['repetido'] == 2 ? 'Fac' : ''); ?></td>
                                 </tr>
-                            <?php endforeach ?>
+                                <?php endforeach;
+                            } ?>
                             </tbody>
                         </table>
                     </div>

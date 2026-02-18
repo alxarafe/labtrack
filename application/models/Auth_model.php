@@ -1,4 +1,5 @@
 <?php
+
 defined("BASEPATH") or die("El acceso al script no está permitido");
 
 define("USER_IS_ADMINISTRATOR", 1);
@@ -6,17 +7,16 @@ define("USER_IS_SUPERVISOR", 2);
 
 /* Válido en PHP 7
 define("USER_ROLES", array(
-	1=>'Administrador',
-	2=>'Tomador',
-	3=>'Maquetador',
-	4=>'Comercial',
+    1=>'Administrador',
+    2=>'Tomador',
+    3=>'Maquetador',
+    4=>'Comercial',
 ));
 */
 
 define("USER_ROLES", serialize(array(
         1 => 'Administrador',
-        2 => 'Usuario',)
-));
+        2 => 'Usuario',)));
 
 class Auth_model extends MY_Model
 {
@@ -88,7 +88,6 @@ class Auth_model extends MY_Model
 			ORDER BY a.timestamp DESC
 			LIMIT $lines");
         return count($data) > 0 ? $data : false;
-
     }
 
     function log_entry($code, $message)
@@ -141,7 +140,7 @@ class Auth_model extends MY_Model
     {
         $query = $this->db->query("SELECT id FROM users WHERE username='$username' OR email='$username'");
         $result = $query->result_array();
-        $user = Null;
+        $user = null;
         if (count($result) > 0) {
             $user = $result[0]['id'];
         }
@@ -152,7 +151,7 @@ class Auth_model extends MY_Model
     {
         $query = $this->db->query("SELECT username FROM users WHERE username='$username' OR email='$username'");
         $result = $query->result_array();
-        $user = Null;
+        $user = null;
         if (count($result) > 0) {
             $user = $result[0]['username'];
         }
@@ -179,7 +178,7 @@ class Auth_model extends MY_Model
     {
         $query = $this->db->query("SELECT email FROM users WHERE username='$username'");
         $result = $query->result_array(MYSQL_ASSOC);
-        $email = Null;
+        $email = null;
         if (count($result) > 0) {
             $email = $result[0]['email'];
         }
@@ -195,8 +194,7 @@ class Auth_model extends MY_Model
             $query = $this->db->get('user_auth');
             $auth = $query->row_array();
 
-            if (count($auth) > 0) // Existe el registro, cambiamos el auth por el nuevo
-            {
+            if (count($auth) > 0) { // Existe el registro, cambiamos el auth por el nuevo
                 $query = $this->db->query("UPDATE user_auth SET auth_code='$token' WHERE user_id=" . $user['id']);
                 return $query;
             } else {
@@ -293,10 +291,11 @@ class Auth_model extends MY_Model
             return false;
         else :
             $user = $query->row_array();
-            if ($user['active'])
+            if ($user['active']) {
                 return $user['id'];
-            else
+            } else {
                 return -$user['id'];
+            }
         endif;
     }
 

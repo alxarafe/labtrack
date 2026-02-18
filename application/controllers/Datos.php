@@ -1,9 +1,9 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Datos extends CI_Controller
 {
-
     function __construct()
     {
         parent::__construct();
@@ -27,7 +27,8 @@ class Datos extends CI_Controller
             $this->load->model('protesis_model');
             $this->protesis_model->checkTables($crear);
             die("Proceso finalizado");
-        } else
+        } else {
             die("No existe la base de datos $database");
+        }
     }
 }

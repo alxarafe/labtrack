@@ -5,7 +5,9 @@
                 <h1 class="text-center login-title"><?= $title ?></h1>
                 <div class="account-wall">
                     <?php
-                    if (isset($message)) echo $message;
+                    if (isset($message)) {
+                        echo $message;
+                    }
                     echo form_error('username'); ?>
                     <input name="username" type="text" class="form-control" value="<?php echo set_value('username') ?>"
                            placeholder="<?php echo lang('form_username') ?>" required autofocus>

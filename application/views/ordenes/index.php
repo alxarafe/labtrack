@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <?php if (isset($message)): ?>
+                <?php if (isset($message)) : ?>
                     <div class="panel panel-danger">
                         <div class="panel-heading">Aviso</div>
                         <div class="panel-body"><?= $message ?></div>
@@ -23,11 +23,11 @@
             </div>
         </div>
         <?php /*if ($centros) foreach ($centros as $key=>$centro): ?>
-	<button name="centro[<?=$key?>]" class="btn btn-primary btn-block touch-button" type="submit"><?= $centro['nombre'] ?></button>
-	<?php endforeach */ ?>
+    <button name="centro[<?=$key?>]" class="btn btn-primary btn-block touch-button" type="submit"><?= $centro['nombre'] ?></button>
+    <?php endforeach */ ?>
         <button name="aceptar" class="btn btn-primary btn-block touch-button" type="submit">Aceptar</button>
         <button name="cancelar" class="btn btn-danger btn-block touch-button" type="submit">Cancelar</button>
-        <?php if ($this->is_supervisor): ?>
+        <?php if ($this->is_supervisor) : ?>
             <button name="editar" class="btn btn-success btn-block touch-button" type="submit">Editar</button>
         <?php endif ?>
     </form>

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <?php if ($log): ?>
+        <?php if ($log) : ?>
             <table class="table table-hover" align="center">
                 <tr>
                     <td>Id</td>

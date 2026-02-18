@@ -2,8 +2,8 @@
     <h1><?= lang('auth_private_area') ?></h1>
 
     <?php /*
-	if (!isset($username)) $username=$user['username'];
-	if (!isset($email)) $email=$user['email'];
+    if (!isset($username)) $username=$user['username'];
+    if (!isset($email)) $email=$user['email'];
 */ ?>
 
     <?= form_open(site_url(/*$this->lang->lang().*/ '/auth/edit/' . $user['username']), array('class' => 'form-horizontal')); ?>
@@ -21,7 +21,8 @@
                     'placeholder' => lang('form_username'),
                     'value' => (set_value('name') ? set_value('name') : (set_value('username') ? set_value('username') : (isset($username) ? $username : $user['username']))),
                     'class' => 'form-control'
-                )); ?>
+                )
+            ); ?>
         </div>
 
         <?= form_label(lang('form_email'), 'email', array('class' => 'col-lg-2 control-label')); ?>
@@ -135,13 +136,13 @@
 
     <?php /*
 <div class="social-wall">
-	<h4>
-	Añada una nueva red social
-	<a class="label label-primary" href="<?= site_url("auth/slogin/Facebook") ?>">Facebook</a>
-	<a class="label label-info" href="<?= site_url("auth/slogin/Twitter") ?>">Twitter</a>
-	<a class="label label-danger" href="<?= site_url("auth/slogin/Google") ?>">Google+</a>
-	<a class="label label-primary" href="<?= site_url("auth/slogin/LinkedIn") ?>">LinkedIn</a>
-	</h4>
+    <h4>
+    Añada una nueva red social
+    <a class="label label-primary" href="<?= site_url("auth/slogin/Facebook") ?>">Facebook</a>
+    <a class="label label-info" href="<?= site_url("auth/slogin/Twitter") ?>">Twitter</a>
+    <a class="label label-danger" href="<?= site_url("auth/slogin/Google") ?>">Google+</a>
+    <a class="label label-primary" href="<?= site_url("auth/slogin/LinkedIn") ?>">LinkedIn</a>
+    </h4>
 </div>
 */ ?>
 

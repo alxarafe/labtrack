@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 define('DEFAULT_JS', _APPNAME);
 define('DEFAULT_CSS', _APPNAME);
@@ -64,11 +68,11 @@ class MY_Controller extends CI_Controller
         $this->data['title'] = '';
         $this->data['description'] = '';
 
-        // $this->data['url']			= base_url(uri_string());
-        // $this->data['sections']		= $this->section_model->get_sections();
+        // $this->data['url']           = base_url(uri_string());
+        // $this->data['sections']      = $this->section_model->get_sections();
         $this->data['image'] = '';
 
-        //$this->data['readonly']	= $this->readonly;
+        //$this->data['readonly']   = $this->readonly;
 
         $this->data['js'][] = DEFAULT_JS;
         $this->data['css'][] = DEFAULT_CSS;
@@ -120,7 +124,7 @@ class MY_Controller extends CI_Controller
 
     function get_all_cookies()
     {
-        $cookies = $this->input->cookie(COOKIE_NAME, TRUE);
+        $cookies = $this->input->cookie(COOKIE_NAME, true);
         if (empty($cookies)) {
             return [];
         }
@@ -128,7 +132,7 @@ class MY_Controller extends CI_Controller
         if (empty($decoded)) {
             return [];
         }
-        $cookies = json_decode($decoded, TRUE);
+        $cookies = json_decode($decoded, true);
         return $cookies;
     }
 
@@ -142,19 +146,17 @@ class MY_Controller extends CI_Controller
     function set_cookie($name, $value, $time = 30 * (24 * 60 * 60))
     {
         $cookies = $this->get_all_cookies();
-        if ($value == Null) {
+        if ($value == null) {
             unset($cookies[$name]);
         } else {
             $cookies[$name] = $value;
         }
         $this->input->set_cookie(COOKIE_NAME, $this->encryption->encrypt(json_encode($cookies)), $time);
     }
-
 }
 
 class MY_Page_Controller extends MY_Controller
 {
-
     public $items, $offset, $page, $total_pages;
 
     function __construct()
@@ -169,12 +171,13 @@ class MY_Page_Controller extends MY_Controller
 
     public function view()
     {
-        if (!isset($this->data['query'])) die ("Debe de asignarse a query el resultado de la consulta antes de llamar al view de MY_Page_Controller.");
+        if (!isset($this->data['query'])) {
+            die("Debe de asignarse a query el resultado de la consulta antes de llamar al view de MY_Page_Controller.");
+        }
 
         $this->offset = ($this->page - 1) * $this->items;
         $this->total_pages = ceil(count($this->data['query']) / $this->items);
 
         return array_slice($this->data['query'], $this->offset, $this->items, true);
     }
-
 }

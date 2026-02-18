@@ -1,4 +1,6 @@
-<?php defined("BASEPATH" or die("El acceso al script no está permitido"));
+<?php
+
+defined("BASEPATH" or die("El acceso al script no está permitido"));
 
 class Configuracion extends MY_Controller
 {
@@ -8,7 +10,9 @@ class Configuracion extends MY_Controller
     {
         parent::__construct();
 
-        if (!$this->is_admin) redirect('/');
+        if (!$this->is_admin) {
+            redirect('/');
+        }
         $this->public_page = false;
 
         $this->data['title'] = 'Configuración de la aplicación';
@@ -56,9 +60,9 @@ class Configuracion extends MY_Controller
                         'oldid' => $value,
                         'id' => $_POST['id'][$key],
                         'username' => $_POST['nombre'][$key],
-                        'admin' => isset($_POST['admin'][$key]) ? 1 : Null,
-                        'supervisor' => isset($_POST['supervisor'][$key]) ? 1 : Null,
-                        'active' => isset($_POST['off'][$key]) ? Null : 1,
+                        'admin' => isset($_POST['admin'][$key]) ? 1 : null,
+                        'supervisor' => isset($_POST['supervisor'][$key]) ? 1 : null,
+                        'active' => isset($_POST['off'][$key]) ? null : 1,
                     );
                 }
             } else {
@@ -72,7 +76,9 @@ class Configuracion extends MY_Controller
                     $supervisor = isset($_POST['supervisor'][$key]) ? 1 : 0;
                     $password = isset($usuarios[$key]) && $usuarios[$key]['password'] != '' ? $usuarios[$key]['password'] : md5('password');
 
-                    if ($oldid > 0) $this->users_model->change_user_id($oldid, $id);
+                    if ($oldid > 0) {
+                        $this->users_model->change_user_id($oldid, $id);
+                    }
 
                     $this->users_model->save_data(
                         'users',
@@ -102,11 +108,11 @@ class Configuracion extends MY_Controller
                         'users',
                         array('id'=>$id),
                         array(
-                            'id'			=> $id,
-                            'username'		=> "'$nombre'",
-                            'fastaccess'	=> "'$faccess'",
-                            'password'		=> "'$password'",
-                            'active'		=> $active?1:0,
+                            'id'            => $id,
+                            'username'      => "'$nombre'",
+                            'fastaccess'    => "'$faccess'",
+                            'password'      => "'$password'",
+                            'active'        => $active?1:0,
                         )
                     );
 
@@ -208,10 +214,11 @@ class Configuracion extends MY_Controller
     public function procesos($proceso_id = null)
     {
         if (isset($_POST['cancelar'])) {
-            if (isset($proceso_id))
+            if (isset($proceso_id)) {
                 redirect('configuracion/procesos');
-            else
+            } else {
                 redirect('configuracion');
+            }
         }
 
         if (isset($proceso_id)) {
@@ -257,9 +264,15 @@ class Configuracion extends MY_Controller
             $page = 'procesos';
         }
 
-        if (isset($familias)) $this->data['familias'] = $familias;
-        if (isset($marcadas)) $this->data['marcadas'] = $marcadas;
-        if (isset($procesos)) $this->data['procesos'] = $procesos;
+        if (isset($familias)) {
+            $this->data['familias'] = $familias;
+        }
+        if (isset($marcadas)) {
+            $this->data['marcadas'] = $marcadas;
+        }
+        if (isset($procesos)) {
+            $this->data['procesos'] = $procesos;
+        }
 
         $this->load->view('templates/header', $this->data);
         $this->load->view('configuracion/' . $page, $this->data);
@@ -269,10 +282,11 @@ class Configuracion extends MY_Controller
     public function secuencias($secuencia_id = null)
     {
         if (isset($_POST['cancelar'])) {
-            if (isset($secuencia_id))
+            if (isset($secuencia_id)) {
                 redirect('configuracion/secuencias');
-            else
+            } else {
                 redirect('configuracion');
+            }
         }
 
         if (isset($secuencia_id)) {
@@ -322,9 +336,15 @@ class Configuracion extends MY_Controller
             $page = 'secuencias';
         }
 
-        if (isset($procesos)) $this->data['procesos'] = $procesos;
-        if (isset($marcados)) $this->data['marcados'] = $marcados;
-        if (isset($secuencias)) $this->data['secuencias'] = $secuencias;
+        if (isset($procesos)) {
+            $this->data['procesos'] = $procesos;
+        }
+        if (isset($marcados)) {
+            $this->data['marcados'] = $marcados;
+        }
+        if (isset($secuencias)) {
+            $this->data['secuencias'] = $secuencias;
+        }
 
         $this->load->view('templates/header', $this->data);
         $this->load->view('configuracion/' . $page, $this->data);
@@ -365,7 +385,7 @@ class Configuracion extends MY_Controller
         if ($id)
         {
             $p=$this->protesis_model->get_producto($id);
-            if (!$p) redirect('/productos');	// Vaya "algo" ha pasado que no he podido recuperar el producto solicitado
+            if (!$p) redirect('/productos');    // Vaya "algo" ha pasado que no he podido recuperar el producto solicitado
             $this->protect_close=true;
         }
         else
@@ -375,7 +395,7 @@ class Configuracion extends MY_Controller
                 'productos',
                 array('id'=>$id),
                 array(
-                    'id'			=> $id,
+                    'id'            => $id,
                 )
             );
             redirect('/productos/edit/'.$id);
@@ -398,18 +418,18 @@ class Configuracion extends MY_Controller
 
         if (isset($_POST['guardar']) /*$this->form_validation->run() === true* /)
         {
-            $id		= $producto['id'];
-            $nombre	= $producto['nombre'];
-            $foto	= $producto['foto'];
-            $estado	= $producto['estado'];
+            $id     = $producto['id'];
+            $nombre = $producto['nombre'];
+            $foto   = $producto['foto'];
+            $estado = $producto['estado'];
 
             $this->protesis_model->save_data(
                 'productos',
                 array('id'=>$id),
                 array(
-                    'nombre'	=> "'$nombre'",
-                    'foto'		=> "'$foto'",
-                    'estado'	=> $estado?1:0,
+                    'nombre'    => "'$nombre'",
+                    'foto'      => "'$foto'",
+                    'estado'    => $estado?1:0,
                 )
             );
 
@@ -423,19 +443,19 @@ class Configuracion extends MY_Controller
                         'lineas_producto',
                         array('id'),
                         array(
-                            'id_producto'		=> $id,
-                            'id_partida'		=> $_POST['partida'][$key],
-                            'id_orden'			=> $_POST['orden'][$key],
-                            'id_tipo'			=> $_POST['tipo'][$key],
-                            'id_serie'			=> $_POST['serie'][$key],
-                            'id_opcional'		=> isset($_POST['opcional'][$key])?1:0,
-                            'id_exclusion'		=> $_POST['exclusion'][$key],
-                            'id_material'		=> $_POST['material'][$key],
-                            'elemento'			=> '"'.$_POST['elemento'][$key].'"',
-                            'cantidad'			=> '"'.$_POST['cantidad'][$key].'"',
-                            'largo'				=> '"'.$_POST['largo'][$key].'"',
-                            'grueso'			=> $_POST['grueso'][$key],
-                            'ancho'				=> $_POST['ancho'][$key],
+                            'id_producto'       => $id,
+                            'id_partida'        => $_POST['partida'][$key],
+                            'id_orden'          => $_POST['orden'][$key],
+                            'id_tipo'           => $_POST['tipo'][$key],
+                            'id_serie'          => $_POST['serie'][$key],
+                            'id_opcional'       => isset($_POST['opcional'][$key])?1:0,
+                            'id_exclusion'      => $_POST['exclusion'][$key],
+                            'id_material'       => $_POST['material'][$key],
+                            'elemento'          => '"'.$_POST['elemento'][$key].'"',
+                            'cantidad'          => '"'.$_POST['cantidad'][$key].'"',
+                            'largo'             => '"'.$_POST['largo'][$key].'"',
+                            'grueso'            => $_POST['grueso'][$key],
+                            'ancho'             => $_POST['ancho'][$key],
                         )
                     );
                 }
@@ -455,7 +475,9 @@ class Configuracion extends MY_Controller
 
     public function import()
     {
-        if (!$this->is_admin) redirect('familias');
+        if (!$this->is_admin) {
+            redirect('familias');
+        }
 
         $dir = "import/";
         $cfile = "centroscosto.csv";
@@ -464,18 +486,22 @@ class Configuracion extends MY_Controller
         $sfile = "secuencias.csv";
 
         if (is_dir($dir)) {
-            if (file_exists($dir . $cfile) &&
+            if (
+                file_exists($dir . $cfile) &&
                 file_exists($dir . $ffile) &&
                 file_exists($dir . $pfile) &&
-                file_exists($dir . $sfile)) {
-                if (ENVIRONMENT == 'development') $this->protesis_model->truncate_familias();
+                file_exists($dir . $sfile)
+            ) {
+                if (ENVIRONMENT == 'development') {
+                    $this->protesis_model->truncate_familias();
+                }
 
                 // INCORPORACIÓN DEL FICHERO DE CENTROS DE COSTO
 
                 $fp = fopen($dir . $cfile, "r");
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -518,7 +544,7 @@ class Configuracion extends MY_Controller
                 // Se lee la cabecera y se toman los nombres en el array $names
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -560,7 +586,7 @@ class Configuracion extends MY_Controller
                 $fp = fopen($dir . $pfile, "r");
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -593,8 +619,9 @@ class Configuracion extends MY_Controller
                     );
 
                     $familias = array_map('trim', explode(',', $data['id_familia']));
-                    foreach ($familias as $familia)
+                    foreach ($familias as $familia) {
                         $this->protesis_model->set_familia_proceso($familia, $data['id'], 1);
+                    }
 
                     unset($data);
                 }
@@ -605,7 +632,7 @@ class Configuracion extends MY_Controller
                 $fp = fopen($dir . $sfile, "r");
 
                 $line = fgetcsv($fp, 0, ";"); // Leer la cabecera para comprobar los campos
-                // $fields = array();	// Array con la posición de los campos
+                // $fields = array();   // Array con la posición de los campos
                 $names = array();  // Array con los nombres de los campos
                 $i = 0;
                 foreach ($line as $nombre) {
@@ -640,19 +667,18 @@ class Configuracion extends MY_Controller
                     );
 
                     $procesos = array_map('trim', explode(',', $data['id_proceso']));
-                    foreach ($procesos as $proceso)
+                    foreach ($procesos as $proceso) {
                         $this->protesis_model->set_proceso_secuencia($proceso, $data['id'], 1);
+                    }
 
                     unset($data);
                 }
                 fclose($fp);
-
             } else {
                 echo "No existen archivos $cfile o $dfile en $dir";
             }
-
-        } else
+        } else {
             echo "No se encuentra el directorio $dir";
+        }
     }
-
 }

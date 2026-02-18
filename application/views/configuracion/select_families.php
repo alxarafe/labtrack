@@ -1,16 +1,17 @@
 <div class="container">
     <h1>Asociar proceso (<?= $proceso['id'] . ') ' . $proceso['nombre'] ?> a las siguientes familias:</h1>
-    <?php if (!$familias): ?>
+    <?php if (!$familias) : ?>
         <h2>Aún no hay datos</h2>
-    <?php else: ?>
-
+    <?php else : ?>
     <form action="<?= base_url('/configuracion/procesos/' . $proceso['id']) ?>" method="post" accept-charset="utf-8"
           class="form-horizontal">
-        <?php foreach ($familias as $value): ?>
+        <?php foreach ($familias as $value) : ?>
             <?php
             $checked = false;
-            if ($marcadas) foreach ($marcadas as $vm) {
-                $checked = $checked || ($vm['id'] == $value['id']);
+            if ($marcadas) {
+                foreach ($marcadas as $vm) {
+                    $checked = $checked || ($vm['id'] == $value['id']);
+                }
             }
             ?>
             <div class="checkbox"><label><input type="checkbox" name="check[<?= $value['id'] ?>]"
@@ -25,4 +26,4 @@
         </div>
     </form>
 </div>
-<?php endif ?>
+    <?php endif ?>

@@ -9,7 +9,9 @@
                          alt="">
                     <form class="form-signin">
                         <?php
-                        if (isset($message)) echo $message;
+                        if (isset($message)) {
+                            echo $message;
+                        }
                         echo form_error('mail_name'); ?>
                         <input name="mail_name" type="text" class="form-control"
                                value="<?php echo set_value('username') ?>"

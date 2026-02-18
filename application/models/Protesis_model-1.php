@@ -1,4 +1,5 @@
 <?php
+
 defined("BASEPATH") or die("El acceso al script no está permitido");
 
 class Protesis_model extends MY_Model
@@ -66,12 +67,12 @@ class Protesis_model extends MY_Model
             /*
             'costosecuencia' => array(
                 'fields' => array(
-                    'id'			=> array('Type' => 'int(10) unsigned', 'Key' => 'PRI', 'Extra' => 'auto_increment'),
-                    'id_costo'		=> array('Type' => 'int(10)'),
-                    'id_secuencia'	=> array('Type' => 'int(10)'),
-                    'id_familia'	=> array('Type' => 'int(10)'),
-                    'id_subfamilia'	=> array('Type' => 'int(10)'),
-                    'estado' 		=> array('Type' => 'tinyint(1)', 'Default' => 1),
+                    'id'            => array('Type' => 'int(10) unsigned', 'Key' => 'PRI', 'Extra' => 'auto_increment'),
+                    'id_costo'      => array('Type' => 'int(10)'),
+                    'id_secuencia'  => array('Type' => 'int(10)'),
+                    'id_familia'    => array('Type' => 'int(10)'),
+                    'id_subfamilia' => array('Type' => 'int(10)'),
+                    'estado'        => array('Type' => 'tinyint(1)', 'Default' => 1),
                 ),
             ),
             */
@@ -195,15 +196,17 @@ ORDER BY b.orden");
     public function set_familia_proceso($id_familia, $id_proceso, $estado)
     {
         $this->runqry("DELETE FROM familias_procesos WHERE id_familia=$id_familia AND id_proceso=$id_proceso");
-        if ($estado)
+        if ($estado) {
             $this->runqry("INSERT INTO familias_procesos (id_familia, id_proceso) VALUES ($id_familia, $id_proceso)");
+        }
     }
 
     public function set_proceso_secuencia($id_proceso, $id_secuencia, $estado)
     {
         $this->runqry("DELETE FROM procesos_secuencias WHERE id_proceso=$id_proceso AND id_secuencia=$id_secuencia");
-        if ($estado)
+        if ($estado) {
             $this->runqry("INSERT INTO procesos_secuencias (id_proceso, id_secuencia) VALUES ($id_proceso, $id_secuencia)");
+        }
     }
 
     public function get_procesos($todos = false)
@@ -292,8 +295,9 @@ ORDER BY b.orden");
         if ($id) {
             $ret = $this->qry2array("SELECT * FROM tipos_material WHERE id=$id");
             return count($ret) > 0 ? $ret[0]['nombre'] : false;
-        } else
+        } else {
             return $this->qry2array('SELECT * FROM tipos_material');
+        }
     }
 
     public function get_series()
@@ -311,5 +315,4 @@ ORDER BY b.orden");
     {
         return $this->qry2array("SELECT * FROM lineas_producto WHERE id_producto=$id ORDER BY id_partida, id_orden");
     }
-
 }

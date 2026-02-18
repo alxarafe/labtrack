@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Consulta de orden de trabajo</h1>
-    <?php if (isset($message)): ?>
+    <?php if (isset($message)) : ?>
         <div class="panel panel-danger">
             <div class="panel-heading">Aviso</div>
             <div class="panel-body"><?= $message ?></div>
@@ -17,8 +17,8 @@
     </form>
 </div>
 <div class="container">
-    <?php if (isset($informe) && $informe && count($informe) > 0): ?>
-        <?php if ($this->is_supervisor): ?>
+    <?php if (isset($informe) && $informe && count($informe) > 0) : ?>
+        <?php if ($this->is_supervisor) : ?>
             <a href="<?= base_url("informes/exportarorden/$orden") ?>" target="_blank" class="btn btn-success">Exportar
                 a CSV</a>
         <?php endif ?>
@@ -44,7 +44,7 @@
             $minutos = 0;
             ?>
             <?php //if ($informe && count($informe)>0): ?>
-            <?php foreach ($informe as $key => $value): ?>
+            <?php foreach ($informe as $key => $value) : ?>
                 <?php
 
                 $contador += $value['unidades'];
@@ -75,7 +75,7 @@
             echo "<tr><td colspan='7' align='right'>Total orden ($minutos minutos):</td><td>$contador</td><td>Rep:</td><td>$contador_rep<td>Fac:</td><td>$contador_fac</td></tr>";
             ?>
         </table>
-    <?php else: ?>
+    <?php else : ?>
         <h3><?= isset($informe) ? 'No hay datos' : 'Revise los datos de la consulta y pulse en aceptar' ?></h3>
     <?php endif ?>
 </div>
