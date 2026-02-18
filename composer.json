@@ -6,7 +6,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "/var/www/alxarafe",
+            "url": "../alxarafe",
             "options": {
                 "symlink": false
             }

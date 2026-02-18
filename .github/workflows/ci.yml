@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, iconv, mysql, mysqli, pdo_mysql, zip
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer update --no-interaction --no-progress --no-audit
+
+      - name: PHPCS Check
+        run: vendor/bin/phpcs --tab-width=4 --encoding=utf-8 --standard=phpcs.xml application Tests
+
+      - name: PHPStan Analysis
+        run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G
+
+      # Generación de métricas (opcional, igual que en chascarrillo)
+      - name: Generate PHP Metrics report
+        run: |
+          mkdir -p public/quality
+          vendor/bin/phpmetrics --report-html=public/quality application
+        continue-on-error: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: quality
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
