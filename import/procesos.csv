@@ -1,0 +1,17 @@
+id;id_familia;nombre;estado
+1;1, 2, 5, 6, 4;Preparación de Modelos PF;1
+2;1, 2;Diseños y Modelados PF;1
+3;1;Estructura Metal cerámica;1
+4;1, 2;Terminación PF y Control de Calidad;1
+5;2;Estructura Fija sin metal;1
+6;7, 8, 9, 15;Preparación de Modelos Esqueleticos;1
+7;7;Diseños y Modelados Cera;1
+8;8;Diseños y Modelados 3D;1
+9;7, 8;Cilindros y fundición esqueléticos;1
+10;7, 8;Terminación Estructura Esquelético;1
+11;9;Diseños 3D composturas;1
+12;9;Cilindros, fundición y terminación composturas 3D;1
+13;10, 11, 12, 13, 14, 16;Preparación de Modelos Resina;1
+14;10, 11, 12;Montajes y modelados Acrílicos;1
+15;10, 11, 12;Terminación Acrílicos;1
+16;13;Planchas y cubetas;1

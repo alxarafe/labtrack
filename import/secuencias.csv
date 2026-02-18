@@ -1,0 +1,89 @@
+id;id_proceso;nombre;estado;duracion;duracionedit
+1;1, 6, 13;Positivado y recortado;1;5;0
+2;1, 6, 13;Base y Recortado;1;4;0
+3;1;Abrir y Paralelizar;1;5;0
+4;1;Duplicado, Placas y Pins;1;8;0
+5;1;Encofrado de Muñones;1;5;0
+6;1, 6, 13;Pegado en Articulador;1;2;0
+7;1, 6, 13;Montaje en Articulador;1;4;0
+8;1;Individualización de Muñones;1;2;0
+9;2;Escaneo de Modelos;1;15;0
+10;2;Escaneo de Pilares;1;4;0
+11;2;Diseño de la Estructura;1;5;0
+12;2;Control de Diseño 3D;1;5;0
+13;2;Modelado de la estructura en cera;1;1;1
+14;2, 8, 11;Puesta en impresora/fresadora;1;5;0
+15;3, 8;Sacar de impresora y limpiar;1;6;0
+16;5;Sacar y cortar en cera/tiza;1;5;0
+17;3, 9;Pinchar para vaciar cilindro;1;4;0
+18;3;Vaciar Cilindro, puesta y metal prepar.;1;5;1
+19;3;Fundición cilindro MC;1;1;1
+20;3;Extracción, Chorreado, Repasado y Pulido de la estructura;1;15;0
+21;3;Control de la Estructura Metal;1;5;0
+22;3;Cortar y Soldar láser;1;40;0
+23;3;Soldadura con soplete;1;20;0
+24;3;Quitar basculación;1;10;0
+25;5;Meter horno sinterizado;1;2;0
+26;5;Repaso estructura monolítico;1;15;0
+27;5;Control de la Estructura Zr;1;3;0
+28;5;Repaso estructura sinterizada;1;12;0
+29;5;Repasar cera fresada;1;4;0
+30;5;Pinchar cilindro e inyección disilicato;1;20;0
+31;5;Sacar de cilindro y chorreado disilicato;1;20;0
+32;5;Control ajuste y repasado Disilicato;1;5;0
+33;4;Opaquer;1;4;0
+34;4;Colocación Cerámica;1;53;0
+35;4;Repaso Cerámica;1;15;1
+36;4;Maquillaje/glaseado Zr;1;5;0
+37;4;Maquillaje/glaseado Disilicato;1;6;0
+38;4, 10;Limpiar cubeta;1;2;0
+39;4;Control final y salida;1;5;0
+40;6;Metido en articulador y lavado de cera;1;6;0
+41;7;Analisis y diseño tradicional;1;5;0
+42;7, 13;Paralelizado del modelo;1;10;0
+43;7, 13;Duplicado del modelo;1;6;0
+44;7;Modelado esquelético en cera;1;45;0
+45;7;Modelado de respaldo cera;1;8;0
+46;7;Control esquelético modelado;1;4;0
+47;8;Análisis y diseño 3D;1;11;0
+48;8;Preparación y escaneado simple;1;15;0
+49;8;Preparación y escaneado con respaldos;1;35;0
+50;8;Diseño 3D por aparato;1;40;0
+51;8, 11;Diseño 3D por respaldo;1;15;0
+52;8;Control de Diseño 3D esquelético;1;5;0
+53;8;Control impresión 3d;1;7;0
+54;9;Preparar fundición cilindro tradicional;1;10;0
+55;9;Fundir Cilindro tradicional;1;3;0
+56;9;Pinchar para vaciar cilindro;1;4;0
+57;9;Vaciar Cilindro, puesta y metal esqueletico 3D;1;7;0
+58;9;Fundir Cilindro esqueletico 3D;1;2;0
+59;9;Extracción esquelético del cilindro;1;2;0
+60;10;Chorreado, repasado y pulido estructura;1;50;0
+61;10;Repasado y pulido de respaldo;1;5;0
+62;10;Verificación esquelético terminado;1;7;0
+63;10;Poner rulos de cera;1;5;0
+64;10;Control de salida esqueléticos;1;1;0
+65;11;Preparación y escaneado compostura simple;1;10;0
+66;11;Preparación y escaneado compostura con respaldos;1;30;0
+67;11;Diseño por segmentos simples;1;10;0
+68;11;Control Impresión compostura 3D;1;2;0
+69;12;Pinchar compostura en cilindro;1;3;0
+70;12;Chorrear, soldar láser y terminar tramo;1;30;0
+71;12;Chorrear, soldar soplete y terminar tramo;1;15;0
+72;12;Verificación  compostura terminada;1;5;0
+73;13;Análisis y repaso paralelizado;1;0;0
+74;14;Montaje de dientes;1;0;0
+75;14;Modelado de prueba;1;0;0
+76;14;Verificación de prueba a terminación;1;0;0
+77;14;Rectificar montaje a prueba o terminación;1;0;0
+78;14;Modelado definitivo de aparato;1;0;0
+79;14;Modelado definitivo férula;1;0;0
+80;14;Hacer gancho forjado unidad;1;0;0
+81;15;Cargar esquelético;1;0;0
+82;15;Enmuflado e inyección;1;0;0
+83;15;Desbastar esquelético;1;0;0
+84;15;Desbastar aparato;1;0;0
+85;15;Pulido de aparato;1;0;0
+86;15, 16;Verificación final;1;0;0
+87;15, 16;Control de salida;1;0;0
+88;16;Realizar plancha o cubeta;1;0;0
