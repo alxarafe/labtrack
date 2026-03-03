@@ -2,7 +2,7 @@
 
 defined("BASEPATH" or die("El acceso al script no está permitido"));
 
-class Informes extends MY_Controller
+class Informes extends PublicController
 {
     public $users_model;
 
@@ -82,7 +82,7 @@ class Informes extends MY_Controller
         fwrite(
             $fp,
             "id;orden;operador;hora;id_cc;centrocosto;id_familia;familia;id_secuencia;secuencia;" .
-            "id_proceso;proceso;unidades;duracion;repetido;supervisado;notas;\n"
+                "id_proceso;proceso;unidades;duracion;repetido;supervisado;notas;\n"
         );    // Comillas dobles necesarias por \n
         foreach ($datos as $data) {
             /*
@@ -96,26 +96,26 @@ class Informes extends MY_Controller
             fwrite(
                 $fp,
                 $data['id'] . ";" .
-                $data['id_orden'] . ";" .
-                $data['id_operador'] . ";" .
-                //'"'.$data['nombre'].'";'.
-                $data['hora'] . ";" .
-                //$data['orden'].";".
-                //$data['secuencia'].";".
-                $data['id_centrocosto'] . ";" .
-                $data['centrocosto'] . ";" .
-                $data['id_familia'] . ";" .
-                $data['familia'] . ";" .
-                $data['id_secuencia'] . ";" .
-                $data['secuencia'] . ";" .
-                $data['id_proceso'] . ";" .
-                $data['proceso'] . ";" .
-                $data['unidades'] . ";" .
-                $data['duracion'] . ";" .
-                $data['repetido'] . ";" .
-                $data['supervisado'] . ";" .
-                '"' . $data['notas'] . '"' .
-                "\n"
+                    $data['id_orden'] . ";" .
+                    $data['id_operador'] . ";" .
+                    //'"'.$data['nombre'].'";'.
+                    $data['hora'] . ";" .
+                    //$data['orden'].";".
+                    //$data['secuencia'].";".
+                    $data['id_centrocosto'] . ";" .
+                    $data['centrocosto'] . ";" .
+                    $data['id_familia'] . ";" .
+                    $data['familia'] . ";" .
+                    $data['id_secuencia'] . ";" .
+                    $data['secuencia'] . ";" .
+                    $data['id_proceso'] . ";" .
+                    $data['proceso'] . ";" .
+                    $data['unidades'] . ";" .
+                    $data['duracion'] . ";" .
+                    $data['repetido'] . ";" .
+                    $data['supervisado'] . ";" .
+                    '"' . $data['notas'] . '"' .
+                    "\n"
             );
         }
         fclose($fp);
@@ -155,7 +155,7 @@ class Informes extends MY_Controller
         fwrite(
             $fp,
             "id;orden;operador;hora;id_cc;centrocosto;id_familia;familia;id_secuencia;secuencia;" .
-            "id_proceso;proceso;unidades;duracion;repetido;supervisado;notas;\n"
+                "id_proceso;proceso;unidades;duracion;repetido;supervisado;notas;\n"
         );    // Comillas dobles necesarias por \n
         foreach ($datos as $data) {
             /*
@@ -169,26 +169,26 @@ class Informes extends MY_Controller
             fwrite(
                 $fp,
                 $data['id'] . ";" .
-                $data['id_orden'] . ";" .
-                $data['id_operador'] . ";" .
-                //'"'.$data['nombre'].'";'.
-                $data['hora'] . ";" .
-                //$data['orden'].";".
-                //$data['secuencia'].";".
-                $data['id_centrocosto'] . ";" .
-                $data['centrocosto'] . ";" .
-                $data['id_familia'] . ";" .
-                $data['familia'] . ";" .
-                $data['id_secuencia'] . ";" .
-                $data['secuencia'] . ";" .
-                $data['id_proceso'] . ";" .
-                $data['proceso'] . ";" .
-                $data['unidades'] . ";" .
-                $data['duracion'] . ";" .
-                $data['repetido'] . ";" .
-                $data['supervisado'] . ";" .
-                '"' . $data['notas'] . '"' .
-                "\n"
+                    $data['id_orden'] . ";" .
+                    $data['id_operador'] . ";" .
+                    //'"'.$data['nombre'].'";'.
+                    $data['hora'] . ";" .
+                    //$data['orden'].";".
+                    //$data['secuencia'].";".
+                    $data['id_centrocosto'] . ";" .
+                    $data['centrocosto'] . ";" .
+                    $data['id_familia'] . ";" .
+                    $data['familia'] . ";" .
+                    $data['id_secuencia'] . ";" .
+                    $data['secuencia'] . ";" .
+                    $data['id_proceso'] . ";" .
+                    $data['proceso'] . ";" .
+                    $data['unidades'] . ";" .
+                    $data['duracion'] . ";" .
+                    $data['repetido'] . ";" .
+                    $data['supervisado'] . ";" .
+                    '"' . $data['notas'] . '"' .
+                    "\n"
             );
         }
         fclose($fp);
@@ -515,7 +515,7 @@ class Informes extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-//---
+    //---
 
     public function familias()
     {

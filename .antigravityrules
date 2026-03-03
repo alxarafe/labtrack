@@ -1,0 +1,10 @@
+# 🏛️ Alxarafe Core Heritage
+# ASSISTANT: This project follows the core standards of Alxarafe Microframework.
+# READ FIRST: vendor/alxarafe/alxarafe/.antigravity-core-rules
+
+## 🎨 Proyecto: LabTrack
+Este archivo describe las reglas específicas para LabTrack que complementan las reglas base del Core.
+
+### 🧪 Análisis & Seguimiento
+- **Estructura Médica**: Este proyecto maneja datos de laboratorios médicos. Mantener rigurosidad en los modelos de `Patient` y `Analysis`.
+- **UI & Components**: Asegurar que todos los formularios médicos usen componentes Alxarafe para validación consistente.

@@ -2,7 +2,7 @@
 
 defined("BASEPATH" or die("El acceso al script no está permitido"));
 
-class Ordenes extends MY_Controller
+class Ordenes extends PublicController
 {
     public function __construct()
     {
@@ -43,7 +43,7 @@ class Ordenes extends MY_Controller
                         'movimientos',
                         array('id' => $value),
                         array(
-                        'supervisado' => $this->user_id,
+                            'supervisado' => $this->user_id,
                         )
                     );
                 }
@@ -530,7 +530,7 @@ class Ordenes extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-//---
+    //---
 
     public function familias()
     {

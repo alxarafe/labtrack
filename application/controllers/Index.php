@@ -1,6 +1,6 @@
 <?php
 
-class Index extends MY_Controller
+class Index extends PublicController
 {
     public function __construct()
     {

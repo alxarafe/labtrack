@@ -108,11 +108,11 @@ class MY_Controller extends CI_Controller
         //$this->readonly = !$this->is_admin && $this->auth_model->check_if_user_is($this->user['username'], USER_IS_COMERCIAL);
 
         /*
-        $this->social_id = $this->session->userdata('social_id');
-        if (!isset($this->social_id) && isset($this->user)) $this->social_id=$this->user['social_id'];
-
-        if ($this->social_id) $this->social = $this->auth_model->get_social_by_id($this->social_id);
-        */
+         $this->social_id = $this->session->userdata('social_id');
+         if (!isset($this->social_id) && isset($this->user)) $this->social_id=$this->user['social_id'];
+ 
+         if ($this->social_id) $this->social = $this->auth_model->get_social_by_id($this->social_id);
+         */
     }
 
     function get_cookie($name)
@@ -137,11 +137,11 @@ class MY_Controller extends CI_Controller
     }
 
     /*
-    function changeLanguage($language)
-    {
-        return base_url($this->lang->switch_uri($language));
-    }
-    */
+     function changeLanguage($language)
+     {
+         return base_url($this->lang->switch_uri($language));
+     }
+     */
 
     function set_cookie($name, $value, $time = 30 * (24 * 60 * 60))
     {
@@ -152,6 +152,14 @@ class MY_Controller extends CI_Controller
             $cookies[$name] = $value;
         }
         $this->input->set_cookie(COOKIE_NAME, $this->encryption->encrypt(json_encode($cookies)), $time);
+    }
+}
+
+class PublicController extends MY_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
     }
 }
 

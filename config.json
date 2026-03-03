@@ -1,0 +1,23 @@
+{
+    "main": {
+        "path": "/var/www/html/public_html",
+        "url": "http://localhost:8084",
+        "theme": "labtrack",
+        "language": "es",
+        "timezone": "Europe/Madrid"
+    },
+    "db": {
+        "type": "mysql",
+        "host": "labtrack_db",
+        "user": "root",
+        "pass": "root",
+        "name": "labtrack_db",
+        "port": "3306",
+        "prefix": "alx_",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_unicode_ci"
+    },
+    "security": {
+        "debug": "1"
+    }
+}
