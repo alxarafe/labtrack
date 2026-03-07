@@ -1,8 +1,9 @@
 parameters:
     level: 1
     paths:
-        - application
+        - Modules
         - Tests
     excludePaths:
+        - application/views
         - vendor
         - system
