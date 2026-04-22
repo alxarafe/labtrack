@@ -78,7 +78,11 @@ class CsvSeeder
                 }
 
                 // Insert Pivot family_process
-                if (Capsule::table('family_process')->where('family_id', (int)$row[1])->where('process_id', (int)$row[0])->count() === 0) {
+                $exists = Capsule::table('family_process')
+                    ->where('family_id', (int)$row[1])
+                    ->where('process_id', (int)$row[0])
+                    ->count() === 0;
+                if ($exists) {
                     Capsule::table('family_process')->insert([
                         'family_id' => (int)$row[1],
                         'process_id' => (int)$row[0],
@@ -110,7 +114,11 @@ class CsvSeeder
                 }
 
                 // Insert Pivot process_sequence
-                if (Capsule::table('process_sequence')->where('process_id', (int)$row[1])->where('sequence_id', (int)$row[0])->count() === 0) {
+                $exists = Capsule::table('process_sequence')
+                    ->where('process_id', (int)$row[1])
+                    ->where('sequence_id', (int)$row[0])
+                    ->count() === 0;
+                if ($exists) {
                     Capsule::table('process_sequence')->insert([
                         'process_id' => (int)$row[1],
                         'sequence_id' => (int)$row[0],

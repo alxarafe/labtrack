@@ -30,11 +30,19 @@ Router::add('config_families_save', '/configuracion/familias/save', 'LabTrack.Co
 Router::add('config_processes', '/configuracion/procesos', 'LabTrack.Config.processes');
 Router::add('config_processes_families', '/configuracion/procesos/{processId}', 'LabTrack.Config.processes');
 Router::add('config_processes_save', '/configuracion/procesos/save', 'LabTrack.Config.saveProcesses');
-Router::add('config_processes_families_save', '/configuracion/procesos/{processId}/save', 'LabTrack.Config.saveProcessFamilies');
+Router::add(
+    'config_processes_families_save',
+    '/configuracion/procesos/{processId}/save',
+    'LabTrack.Config.saveProcessFamilies'
+);
 Router::add('config_sequences', '/configuracion/secuencias', 'LabTrack.Config.sequences');
 Router::add('config_sequences_processes', '/configuracion/secuencias/{sequenceId}', 'LabTrack.Config.sequences');
 Router::add('config_sequences_save', '/configuracion/secuencias/save', 'LabTrack.Config.saveSequences');
-Router::add('config_sequences_processes_save', '/configuracion/secuencias/{sequenceId}/save', 'LabTrack.Config.saveSequenceProcesses');
+Router::add(
+    'config_sequences_processes_save',
+    '/configuracion/secuencias/{sequenceId}/save',
+    'LabTrack.Config.saveSequenceProcesses'
+);
 
 // Supervision
 Router::add('supervision', '/supervision', 'LabTrack.Report.validate');
