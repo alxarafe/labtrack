@@ -44,7 +44,7 @@ use Modules\LabTrack\Model\Movement as EloquentMovement;
 class OrderController extends ResourceController
 {
     #[\Override]
-    protected function getModelClassName(): string
+    protected function getModelClass(): string
     {
         return \Modules\LabTrack\Model\Order::class;
     }
