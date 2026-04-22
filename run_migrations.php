@@ -2,7 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Alxarafe\Base\Config;
+use Alxarafe\Infrastructure\Persistence\Config;
 
 // Define paths
 define('APP_PATH', __DIR__);

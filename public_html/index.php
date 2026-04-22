@@ -4,9 +4,9 @@ session_start();
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Alxarafe\Tools\Dispatcher\WebDispatcher;
-use Alxarafe\Base\Config;
-use Alxarafe\Lib\Trans;
+use Alxarafe\Infrastructure\Tools\Dispatcher\WebDispatcher;
+use Alxarafe\Infrastructure\Persistence\Config;
+use Alxarafe\Infrastructure\Lib\Trans;
 
 // Step 1: Core Path and Environment definitions
 define('APP_PATH', realpath(__DIR__ . '/../'));
@@ -42,9 +42,8 @@ if ($config && isset($config->main)) {
     // We define the active theme for the ThemeManager and other framework components
     define('THEME_SKIN', $config->main->theme);
 
-    // Step 4: Initialize Database connection
     if ($config && isset($config->db)) {
-        \Alxarafe\Base\Database::createConnection($config->db);
+        \Alxarafe\Infrastructure\Persistence\Database::createConnection($config->db);
     }
 }
 

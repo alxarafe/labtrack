@@ -2,20 +2,32 @@
 
 declare(strict_types=1);
 
+/*
+ * Copyright (C) 2024-2026 Rafael San José <rsanjose@alxarafe.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
 namespace Modules\LabTrack\Controller;
 
-use CoreModules\Admin\Controller\PublicController;
-use Alxarafe\Lib\Trans;
-use Alxarafe\Lib\Functions;
-use Alxarafe\Lib\Auth;
-use Modules\LabTrack\Model\Order;
-use Modules\LabTrack\Model\Movement;
+use Alxarafe\Attribute\Menu;
+use Alxarafe\Infrastructure\Http\Controller\ResourceController;
+use Alxarafe\Infrastructure\Lib\Messages;
+use Alxarafe\Application\Bus\SimpleCommandBus;
+use Modules\LabTrack\Application\AppContainer;
+use Modules\LabTrack\Domain\Port\Driven\MovementRepositoryInterface;
+use Modules\LabTrack\Domain\Port\Driven\WorkOrderRepositoryInterface;
+use Modules\LabTrack\Application\Bus\Command\RecordMovementCommand;
+use Modules\LabTrack\Application\Bus\Command\CreateOrderCommand;
+use Modules\LabTrack\Domain\Model\WorkOrder;
 use Modules\LabTrack\Model\CostCenter;
 use Modules\LabTrack\Model\Family;
 use Modules\LabTrack\Model\Process;
 use Modules\LabTrack\Model\Sequence;
-
-use Alxarafe\Attribute\Menu;
+use Modules\LabTrack\Model\Movement as EloquentMovement;
 
 #[Menu(
     menu: 'admin_sidebar',
@@ -26,170 +38,178 @@ use Alxarafe\Attribute\Menu;
 )]
 /**
  * Controller for managing lab work orders.
+ * Uses hexagonal architecture: Domain Ports + Command Bus for mutations,
+ * Eloquent Models for read-only queries (CQRS light).
  */
-class OrderController extends PublicController
+class OrderController extends ResourceController
 {
-    /**
-     * @inheritDoc
-     */
-    public static function getModuleName(): string
+    #[\Override]
+    protected function getModelClassName(): string
     {
-        return 'LabTrack';
+        return \Modules\LabTrack\Model\Order::class;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public static function getControllerName(): string
+    private MovementRepositoryInterface $movementRepository;
+    private WorkOrderRepositoryInterface $orderRepository;
+    private SimpleCommandBus $commandBus;
+
+    public function __construct()
     {
-        return 'Order';
+        parent::__construct();
+
+        $container = AppContainer::get();
+        $this->movementRepository = $container->get(MovementRepositoryInterface::class);
+        $this->orderRepository = $container->get(WorkOrderRepositoryInterface::class);
+        $this->commandBus = $container->get(SimpleCommandBus::class);
     }
 
-    /**
-     * Main action for order management.
-     *
-     * @return bool
-     */
-    public function doIndex(): bool
+    #[\Override]
+    protected function fetchListData(string $tabId): array
     {
-        $orderId = $_POST['order'] ?? $_GET['order'] ?? null;
+        $orders = $this->orderRepository->findRecent(50);
 
-        if ($orderId) {
-            return $this->handleOrderView((int)$orderId);
+        $data = [];
+        foreach ($orders as $order) {
+            $data[] = $order->toArray();
         }
 
-        $this->addVariables([
-            'title' => Trans::_('order_management'),
-            'description' => Trans::_('order_management_description'),
-        ]);
+        return ['total' => count($data), 'rows' => $data];
+    }
 
-        $this->setDefaultTemplate('labtrack/order/index');
+    #[\Override]
+    protected function fetchRecordData(): array
+    {
+        if ($this->recordId === 'new') {
+            return ['name' => ''];
+        }
 
+        $order = $this->orderRepository->findById((int) $this->recordId);
+        if (!$order) {
+            return [];
+        }
+
+        // Add movements for the order detail view
+        $movements = $this->movementRepository->findDetailedByOrderId((int) $this->recordId, true);
+
+        $data = $order->toArray();
+        $data['movements'] = $movements;
+
+        return $data;
+    }
+
+    #[\Override]
+    protected function saveRecord(): void
+    {
+        $data = $_POST['data'] ?? [];
+        $name = $data['name'] ?? 'Sin nombre';
+
+        if (!empty($this->recordId) && $this->recordId !== 'new') {
+            // Update existing order
+            $order = $this->orderRepository->findById((int) $this->recordId);
+            if ($order) {
+                $order->rename($name);
+                $this->orderRepository->save($order);
+                Messages::addMessage('Orden modificada con éxito.');
+            }
+        } else {
+            // Create new order via Command Bus
+            $cmd = new CreateOrderCommand($name);
+            $this->commandBus->dispatch($cmd);
+            Messages::addMessage('Orden creada con éxito.');
+        }
+
+        header('Location: ' . static::url());
+        exit;
+    }
+
+    #[\Override]
+    public function doDelete(): bool
+    {
+        if ($this->recordId && $this->recordId !== 'new') {
+            // Check if order has movements before deleting
+            $movements = $this->movementRepository->findByOrderId((int) $this->recordId);
+            if (!empty($movements)) {
+                Messages::addError('No se puede borrar una orden con movimientos registrados.');
+                header('Location: ' . static::url());
+                exit;
+            }
+
+            $this->orderRepository->delete((int) $this->recordId);
+            Messages::addMessage('Orden borrada con éxito.');
+        }
+
+        header('Location: ' . static::url());
+        exit;
         return true;
     }
 
     /**
-     * Saves a new order or updates an existing one.
-     *
-     * @return bool
-     */
-    public function doSave(): bool
-    {
-        $id = $_POST['id'] ?? null;
-        $name = $_POST['name'] ?? $_POST['nombre'] ?? '';
-
-        $order = $id ? Order::findOrNew($id) : new Order();
-        $order->name = $name;
-        $order->save();
-
-        if (isset($_SESSION['labtrack']['operator_id'])) {
-            // If we are in the middle of a station workflow
-            $_SESSION['labtrack']['order_id'] = $order->id;
-            Functions::httpRedirect($this::url('Main.selectCenter'));
-            return true;
-        }
-
-        Functions::httpRedirect($this::url('index', ['order' => $order->id]));
-
-        return true;
-    }
-
-    /**
-     * Adds a new production record (movement).
-     *
-     * @return bool
+     * Records a production movement via Command Bus.
      */
     public function doAddRecord(): bool
     {
         $data = $_POST;
 
-        $movement = new Movement();
-        $movement->order_id = (int)($data['order_id'] ?? 0);
-        $movement->cost_center_id = (int)($data['center_id'] ?? 0);
-        $movement->family_id = (int)($data['family_id'] ?? 0);
-        $movement->process_id = (int)($data['process_id'] ?? 0);
-        $movement->sequence_id = (int)($data['sequence_id'] ?? 0);
-        $movement->units = (int)($data['units'] ?? 1);
-        $movement->duration_minutes = (int)($data['duration'] ?? 0);
-        $movement->notes = $data['notes'] ?? '';
-        $movement->operator_id = Auth::$user->id ?? 0; // In admin view, we use the logged user
-        $movement->supervised_by = null;
+        $cmd = new RecordMovementCommand(
+            operatorId: (int) ($data['operator_id'] ?? \Alxarafe\Infrastructure\Auth\Auth::$user->id ?? 0),
+            orderId: (int) ($data['order_id'] ?? 0),
+            costCenterId: (int) ($data['center_id'] ?? 0),
+            familyId: (int) ($data['family_id'] ?? 0),
+            processId: (int) ($data['process_id'] ?? 0),
+            sequenceId: (int) ($data['sequence_id'] ?? 0),
+            units: (int) ($data['units'] ?? 1),
+            durationMinutes: (int) ($data['duration'] ?? 0),
+            repeated: (int) ($data['repeated'] ?? 0),
+            notes: $data['notes'] ?? null
+        );
 
-        $movement->save();
+        $this->commandBus->dispatch($cmd);
+        Messages::addMessage('Movimiento registrado con éxito.');
 
-        Functions::httpRedirect($this::url('index', [
-            'order' => $movement->order_id,
-            'center' => $movement->cost_center_id,
-            'family' => $movement->family_id,
-            'process' => $movement->process_id,
-        ]));
-
+        header('Location: ' . static::url('edit', ['id' => $cmd->orderId]));
+        exit;
         return true;
     }
 
-    /**
-     * Handles the view for a specific order.
-     *
-     * @param int $orderId
-     * @return bool
-     */
-    protected function handleOrderView(int $orderId): bool
+    #[\Override]
+    protected function getListColumns(): array
     {
-        $order = Order::find($orderId);
+        return [
+            'id',
+            'name' => [
+                'type' => 'text',
+                'label' => 'Nombre',
+            ],
+        ];
+    }
 
-        if (!$order) {
-            $this->addVariables([
-                'title' => Trans::_('new_order'),
-                'orderId' => $orderId,
-            ]);
-            $this->setDefaultTemplate('labtrack/order/create');
-            return true;
+    #[\Override]
+    protected function getEditFields(): array
+    {
+        return [
+            'order_data' => [
+                'label' => 'Datos de la Orden',
+                'col' => 'col-md-6',
+                'fields' => [
+                    'id' => new \Alxarafe\Infrastructure\Component\Fields\Text('id', 'ID', ['readonly' => true]),
+                    'name' => new \Alxarafe\Infrastructure\Component\Fields\Text('name', 'Nombre'),
+                ],
+            ],
+        ];
+    }
+
+    #[\Override]
+    protected function beforeEdit(): void
+    {
+        if ($this->recordId && $this->recordId !== 'new') {
+            $data = $this->fetchRecordData();
+            $this->addVariable('data', $data);
+
+            // Provide drill-down data for the order edit view
+            $centers = CostCenter::where('active', 1)->orderBy('sort_order')->get();
+            $this->addVariable('centers', $centers);
+        } elseif ($this->recordId === 'new') {
+            $this->addVariable('data', ['name' => '']);
         }
-
-        // Drill-down selection logic
-        $centerId = (int)($_GET['center'] ?? 0);
-        $familyId = (int)($_GET['family'] ?? 0);
-        $processId = (int)($_GET['process'] ?? 0);
-
-        $centers = CostCenter::where('active', 1)->orderBy('sort_order')->get();
-        $families = $centerId ? Family::where('cost_center_id', $centerId)->where('active', 1)->orderBy('sort_order')->get() : [];
-
-        $processes = [];
-        if ($familyId) {
-            $family = Family::find($familyId);
-            if ($family) {
-                $processes = $family->processes()->where('active', 1)->orderBy('sort_order')->get();
-            }
-        }
-
-        $sequences = [];
-        if ($processId) {
-            $process = Process::find($processId);
-            if ($process) {
-                $sequences = $process->sequences()->where('active', 1)->orderBy('sort_order')->get();
-            }
-        }
-
-        // Logic for existing order (Editar Orden)
-        $movements = Movement::where('order_id', $orderId)
-            ->with(['operator']) // Sequence? Check relationships in Model
-            ->orderBy('movement_at', 'desc')
-            ->get();
-
-        $this->addVariables([
-            'title' => Trans::_('order_dashboard'),
-            'order' => $order,
-            'movements' => $movements,
-            'centers' => $centers,
-            'families' => $families,
-            'processes' => $processes,
-            'sequences' => $sequences,
-            'centerId' => $centerId,
-            'familyId' => $familyId,
-            'processId' => $processId,
-        ]);
-        $this->setDefaultTemplate('labtrack/order/edit');
-
-        return true;
     }
 }

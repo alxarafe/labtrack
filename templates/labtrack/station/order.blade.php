@@ -7,9 +7,9 @@
             <h1 class="display-6 fw-bold mb-0">{{ $title }}</h1>
             <p class="text-muted">Operario: <strong>{{ $_SESSION['labtrack']['operator_name'] }}</strong></p>
         </div>
-        <x-component.button variant="outline-danger" :href="$me::url('logout')" class="shadow-sm px-4">
+        <a href="{{ $me::url('logout') }}" class="btn btn-outline-danger shadow-sm px-4">
             <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-        </x-component.button>
+        </a>
     </div>
 
     <x-component.card class="shadow-sm border-0 mb-4" style="border-radius: 15px;">

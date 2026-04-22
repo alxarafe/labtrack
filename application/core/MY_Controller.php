@@ -110,7 +110,7 @@ class MY_Controller extends CI_Controller
         /*
          $this->social_id = $this->session->userdata('social_id');
          if (!isset($this->social_id) && isset($this->user)) $this->social_id=$this->user['social_id'];
- 
+
          if ($this->social_id) $this->social = $this->auth_model->get_social_by_id($this->social_id);
          */
     }

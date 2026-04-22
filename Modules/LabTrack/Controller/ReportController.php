@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\LabTrack\Controller;
 
-use CoreModules\Admin\Controller\PublicController;
-use Alxarafe\Lib\Trans;
-use Alxarafe\Lib\Auth;
-use Alxarafe\Lib\Functions;
+use Alxarafe\Infrastructure\Http\Controller\ViewController;
+use Alxarafe\Infrastructure\Lib\Trans;
+use Alxarafe\Infrastructure\Auth\Auth;
+use Alxarafe\Infrastructure\Lib\Functions;
+use Modules\LabTrack\Application\AppContainer;
+use Modules\LabTrack\Domain\Port\Driven\MovementRepositoryInterface;
 use Modules\LabTrack\Model\Operator;
 use Modules\LabTrack\Model\Movement;
 use CoreModules\Admin\Model\User;
@@ -25,12 +27,21 @@ use Alxarafe\Attribute\Menu;
 /**
  * Controller for generating and managing production reports.
  */
-class ReportController extends PublicController
+class ReportController extends ViewController
 {
+    private MovementRepositoryInterface $movementRepository;
+
     /**
      * @var bool
      */
     protected bool $isSupervisor = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $container = AppContainer::get();
+        $this->movementRepository = $container->get(MovementRepositoryInterface::class);
+    }
 
     /**
      * @inheritDoc

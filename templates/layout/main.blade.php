@@ -21,8 +21,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    @if(\Alxarafe\Lib\Auth::$user)
-                        @if(\Alxarafe\Lib\Auth::$user->is_admin)
+                    @if(\Alxarafe\Infrastructure\Auth\Auth::$user)
+                        @if(\Alxarafe\Infrastructure\Auth\Auth::$user->is_admin)
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="/configuracion"><i class="fas fa-cog me-1"></i>Configuración</a>
                             </li>
@@ -35,10 +35,10 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user me-1"></i>{{ \Alxarafe\Lib\Auth::$user->username }}
+                                <i class="fas fa-user me-1"></i>{{ \Alxarafe\Infrastructure\Auth\Auth::$user->username }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/auth/edit/{{ \Alxarafe\Lib\Auth::$user->id }}">Perfil</a></li>
+                                <li><a class="dropdown-item" href="/auth/edit/{{ \Alxarafe\Infrastructure\Auth\Auth::$user->id }}">Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="/auth/logout">Cerrar sesión</a></li>
                             </ul>

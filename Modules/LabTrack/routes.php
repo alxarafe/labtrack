@@ -8,7 +8,6 @@ use Alxarafe\Infrastructure\Http\Router;
 // LabTrack Routes
 Router::add('home', '/', 'LabTrack.Main.index');
 Router::add('admin_login', '/auth/login', 'Admin.Auth.login');
-Router::add('legacy_auth_index', '/auth/index.php', 'Admin.Auth.login');
 Router::add('admin_logout', '/auth/logout', 'Admin.Auth.logout');
 Router::add('login', '/login', 'LabTrack.Main.login');
 Router::add('logout', '/logout', 'LabTrack.Main.logout');

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\LabTrack\Controller;
 
-use CoreModules\Admin\Controller\PublicController;
-use Alxarafe\Lib\Auth;
-use Alxarafe\Lib\Functions;
-use Alxarafe\Lib\Trans;
-use Alxarafe\Base\Database;
+use Alxarafe\Infrastructure\Http\Controller\ViewController;
+use Alxarafe\Infrastructure\Auth\Auth;
+use Alxarafe\Infrastructure\Lib\Functions;
+use Alxarafe\Infrastructure\Lib\Trans;
+use Alxarafe\Infrastructure\Persistence\Database;
 use Modules\LabTrack\Model\Operator;
 use CoreModules\Admin\Model\User;
 use Modules\LabTrack\Model\CostCenter;
@@ -24,7 +24,7 @@ use Alxarafe\Attribute\Menu;
     order: 40,
     permission: 'LabTrack.Config.index'
 )]
-class ConfigController extends PublicController
+class ConfigController extends ViewController
 {
     /**
      * @inheritDoc

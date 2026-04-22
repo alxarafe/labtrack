@@ -2,21 +2,43 @@
 
 declare(strict_types=1);
 
+/*
+ * Copyright (C) 2024-2026 Rafael San José <rsanjose@alxarafe.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
 namespace Modules\LabTrack\Controller;
 
-use Alxarafe\Base\Controller\ViewController;
-use Alxarafe\Lib\Functions;
-use Alxarafe\Lib\Trans;
+use Alxarafe\Infrastructure\Http\Controller\ViewController;
+use Alxarafe\Infrastructure\Lib\Functions;
+use Alxarafe\Infrastructure\Lib\Trans;
+use Alxarafe\Application\Bus\SimpleCommandBus;
+use Modules\LabTrack\Application\AppContainer;
+use Modules\LabTrack\Application\Bus\Command\RecordMovementCommand;
+use Modules\LabTrack\Domain\Port\Driven\WorkOrderRepositoryInterface;
 use Modules\LabTrack\Model\Operator;
-use Modules\LabTrack\Model\Order;
 use Modules\LabTrack\Model\CostCenter;
 use Modules\LabTrack\Model\Family;
 use Modules\LabTrack\Model\Process;
-use Modules\LabTrack\Model\Sequence;
-use Modules\LabTrack\Model\Movement;
 
 class MainController extends ViewController
 {
+    private SimpleCommandBus $commandBus;
+    private WorkOrderRepositoryInterface $orderRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $container = AppContainer::get();
+        $this->commandBus = $container->get(SimpleCommandBus::class);
+        $this->orderRepository = $container->get(WorkOrderRepositoryInterface::class);
+    }
+
     /**
      * Shows the PIN identification screen.
      */
@@ -67,13 +89,13 @@ class MainController extends ViewController
     }
 
     /**
-     * Selects an Order.
+     * Selects an Order — uses Domain Repository for read.
      */
     public function doSelectOrder(): bool
     {
         $this->checkIdentification();
 
-        $orders = Order::orderBy('id', 'desc')->take(20)->get();
+        $orders = $this->orderRepository->findRecent(20);
 
         $this->addVariables([
             'title' => Trans::_('select_order'),
@@ -112,9 +134,10 @@ class MainController extends ViewController
     /**
      * Selects a Family.
      */
-    public function doSelectFamily(int $centerId): bool
+    public function doSelectFamily(): bool
     {
         $this->checkIdentification();
+        $centerId = (int)($_GET['centerId'] ?? 0);
         $_SESSION['labtrack']['cost_center_id'] = $centerId;
 
         $families = Family::where('cost_center_id', $centerId)
@@ -133,9 +156,10 @@ class MainController extends ViewController
     /**
      * Selects a Process.
      */
-    public function doSelectProcess(int $familyId): bool
+    public function doSelectProcess(): bool
     {
         $this->checkIdentification();
+        $familyId = (int)($_GET['familyId'] ?? 0);
         $_SESSION['labtrack']['family_id'] = $familyId;
 
         $family = Family::find($familyId);
@@ -152,9 +176,10 @@ class MainController extends ViewController
     /**
      * Selects a Sequence.
      */
-    public function doSelectSequence(int $processId): bool
+    public function doSelectSequence(): bool
     {
         $this->checkIdentification();
+        $processId = (int)($_GET['processId'] ?? 0);
         $_SESSION['labtrack']['process_id'] = $processId;
 
         $process = Process::find($processId);
@@ -169,7 +194,7 @@ class MainController extends ViewController
     }
 
     /**
-     * Records the movement.
+     * Records the movement via Command Bus (hexagonal).
      */
     public function doRecord(): bool
     {
@@ -181,22 +206,26 @@ class MainController extends ViewController
 
         $data = $_SESSION['labtrack'];
 
-        $movement = new Movement();
-        $movement->operator_id = $data['operator_id'];
-        $movement->order_id = $data['order_id'];
-        $movement->cost_center_id = $data['cost_center_id'];
-        $movement->family_id = $data['family_id'];
-        $movement->process_id = $data['process_id'];
-        $movement->sequence_id = $sequenceId;
-        $movement->units = $units;
-        $movement->duration_minutes = $duration;
-        $movement->save();
+        $cmd = new RecordMovementCommand(
+            operatorId: (int)$data['operator_id'],
+            orderId: (int)$data['order_id'],
+            costCenterId: (int)$data['cost_center_id'],
+            familyId: (int)$data['family_id'],
+            processId: (int)$data['process_id'],
+            sequenceId: $sequenceId,
+            units: $units,
+            durationMinutes: $duration
+        );
+
+        $this->commandBus->dispatch($cmd);
 
         // Clear workflow but keep operator
-        unset($_SESSION['labtrack']['order_id']);
-        unset($_SESSION['labtrack']['cost_center_id']);
-        unset($_SESSION['labtrack']['family_id']);
-        unset($_SESSION['labtrack']['process_id']);
+        unset(
+            $_SESSION['labtrack']['order_id'],
+            $_SESSION['labtrack']['cost_center_id'],
+            $_SESSION['labtrack']['family_id'],
+            $_SESSION['labtrack']['process_id']
+        );
 
         Functions::httpRedirect($this::url('selectOrder'));
         return true;
