@@ -22,5 +22,4 @@ config.php
 .env
 .phpunit.cache/
 .phpstan.cache/
-phpunit.xml
 /var/
