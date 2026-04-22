@@ -102,23 +102,68 @@ class Movement
     }
 
     // Getters
-    public function getId(): ?int { return $this->id; }
-    public function getOperatorId(): int { return $this->operatorId; }
-    public function getOrderId(): int { return $this->orderId; }
-    public function getCostCenterId(): int { return $this->costCenterId; }
-    public function getFamilyId(): int { return $this->familyId; }
-    public function getProcessId(): int { return $this->processId; }
-    public function getSequenceId(): int { return $this->sequenceId; }
-    public function getUnits(): int { return $this->units; }
-    public function getDurationMinutes(): int { return $this->durationMinutes; }
-    public function getRepeated(): int { return $this->repeated; }
-    public function getSupervisedBy(): ?int { return $this->supervisedBy; }
-    public function getNotes(): ?string { return $this->notes; }
-    public function getMovementAt(): ?DateTimeImmutable { return $this->movementAt; }
-    public function isSupervised(): bool { return $this->supervisedBy !== null && $this->supervisedBy > 0; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getOperatorId(): int
+    {
+        return $this->operatorId;
+    }
+    public function getOrderId(): int
+    {
+        return $this->orderId;
+    }
+    public function getCostCenterId(): int
+    {
+        return $this->costCenterId;
+    }
+    public function getFamilyId(): int
+    {
+        return $this->familyId;
+    }
+    public function getProcessId(): int
+    {
+        return $this->processId;
+    }
+    public function getSequenceId(): int
+    {
+        return $this->sequenceId;
+    }
+    public function getUnits(): int
+    {
+        return $this->units;
+    }
+    public function getDurationMinutes(): int
+    {
+        return $this->durationMinutes;
+    }
+    public function getRepeated(): int
+    {
+        return $this->repeated;
+    }
+    public function getSupervisedBy(): ?int
+    {
+        return $this->supervisedBy;
+    }
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+    public function getMovementAt(): ?DateTimeImmutable
+    {
+        return $this->movementAt;
+    }
+    public function isSupervised(): bool
+    {
+        return $this->supervisedBy !== null && $this->supervisedBy > 0;
+    }
 
     // Setters / Actions
-    public function setId(int $id): void { $this->id = $id; }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function supervise(int $supervisorId): void
     {

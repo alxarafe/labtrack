@@ -1,13 +1,14 @@
 <?php
 
+/**
+ * Migration for sequences.
+ */
+
 declare(strict_types=1);
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 
-/**
- * Migration for sequences.
- */
 return new class {
     private string $table = 'sequences';
     private string $legacyTable = 'secuencias';

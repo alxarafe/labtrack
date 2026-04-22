@@ -64,7 +64,7 @@ class CsvSeeder
                 if (!isset($row[0], $row[1], $row[2], $row[3])) {
                     continue;
                 }
-                
+
                 // Insert process if not exists
                 if (Capsule::table('processes')->where('id', (int)$row[0])->count() === 0) {
                     Capsule::table('processes')->insert([
@@ -76,7 +76,7 @@ class CsvSeeder
                         'updated_at' => date('Y-m-d H:i:s'),
                     ]);
                 }
-                
+
                 // Insert Pivot family_process
                 if (Capsule::table('family_process')->where('family_id', (int)$row[1])->where('process_id', (int)$row[0])->count() === 0) {
                     Capsule::table('family_process')->insert([
@@ -94,7 +94,7 @@ class CsvSeeder
                 if (!isset($row[0], $row[1], $row[2], $row[3], $row[4])) {
                     continue;
                 }
-                
+
                 // Insert sequence if not exists
                 if (Capsule::table('sequences')->where('id', (int)$row[0])->count() === 0) {
                     Capsule::table('sequences')->insert([
@@ -108,7 +108,7 @@ class CsvSeeder
                         'updated_at' => date('Y-m-d H:i:s'),
                     ]);
                 }
-                
+
                 // Insert Pivot process_sequence
                 if (Capsule::table('process_sequence')->where('process_id', (int)$row[1])->where('sequence_id', (int)$row[0])->count() === 0) {
                     Capsule::table('process_sequence')->insert([

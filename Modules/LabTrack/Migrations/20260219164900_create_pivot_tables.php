@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Database\Schema\Blueprint;
-
 /**
  * Migration for pivot tables.
  */
+
+declare(strict_types=1);
+
+use Illuminate\Database\Schema\Blueprint;
+
 return new class {
     private string $fpTable = 'family_process';
     private string $psTable = 'process_sequence';

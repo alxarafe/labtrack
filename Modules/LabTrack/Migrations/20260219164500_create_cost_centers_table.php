@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Database\Schema\Blueprint;
-
 /**
  * Migration for cost centers.
  */
+
+declare(strict_types=1);
+
+use Illuminate\Database\Schema\Blueprint;
+
 return new class {
     private string $table = 'cost_centers';
     private string $legacyTable = 'centroscosto';

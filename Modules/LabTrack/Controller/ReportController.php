@@ -14,7 +14,6 @@ use Modules\LabTrack\Model\Operator;
 use Modules\LabTrack\Model\Movement;
 use CoreModules\Admin\Model\User;
 use Carbon\Carbon;
-
 use Alxarafe\Attribute\Menu;
 
 #[Menu(

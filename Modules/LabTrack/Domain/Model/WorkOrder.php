@@ -39,11 +39,20 @@ class WorkOrder
     }
 
     // Getters
-    public function getId(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
     // Setters / Actions
-    public function setId(int $id): void { $this->id = $id; }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function rename(string $name): void
     {

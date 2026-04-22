@@ -108,7 +108,7 @@ class PdoMovementRepository implements MovementRepositoryInterface
             WHERE m.order_id = :order_id
             ORDER BY m.movement_at {$order}
         ";
-        
+
         return $this->db->rawQuery($sql, ['order_id' => $orderId]);
     }
 
@@ -146,7 +146,7 @@ class PdoMovementRepository implements MovementRepositoryInterface
               AND m.movement_at BETWEEN ? AND ?
             ORDER BY op.name, cc.name, s.name, f.name, p.name
         ";
-        
+
         return $this->db->rawQuery($sql, $params);
     }
 }
