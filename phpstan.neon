@@ -4,6 +4,4 @@ parameters:
         - Modules
         - Tests
     excludePaths:
-        - application/views
         - vendor
-        - system

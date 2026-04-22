@@ -35,7 +35,7 @@ jobs:
         run: composer update --no-interaction --no-progress --no-audit
 
       - name: PHPCS Check
-        run: vendor/bin/phpcs --tab-width=4 --encoding=utf-8 --standard=phpcs.xml application Tests
+        run: vendor/bin/phpcs --tab-width=4 --encoding=utf-8 --standard=phpcs.xml Modules Tests
 
       - name: PHPStan Analysis
         run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G
@@ -44,7 +44,7 @@ jobs:
       - name: Generate PHP Metrics report
         run: |
           mkdir -p public_html/quality
-          vendor/bin/phpmetrics --report-html=public_html/quality application
+          vendor/bin/phpmetrics --report-html=public_html/quality Modules
         continue-on-error: true
 
       - name: Upload Pages artifact
