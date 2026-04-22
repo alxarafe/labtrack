@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Modules\LabTrack\Controller;
 
-use Alxarafe\Attribute\Menu;
+use Alxarafe\Infrastructure\Attribute\Menu;
 use Alxarafe\Infrastructure\Http\Controller\ResourceController;
 use Alxarafe\Infrastructure\Lib\Messages;
 use Alxarafe\Application\Bus\SimpleCommandBus;
@@ -191,8 +191,8 @@ class OrderController extends ResourceController
                 'label' => 'Datos de la Orden',
                 'col' => 'col-md-6',
                 'fields' => [
-                    'id' => new \Alxarafe\Infrastructure\Component\Fields\Text('id', 'ID', ['readonly' => true]),
-                    'name' => new \Alxarafe\Infrastructure\Component\Fields\Text('name', 'Nombre'),
+                    'id' => new \Alxarafe\ResourceController\Component\Fields\Text('id', 'ID', ['readonly' => true]),
+                    'name' => new \Alxarafe\ResourceController\Component\Fields\Text('name', 'Nombre'),
                 ],
             ],
         ];

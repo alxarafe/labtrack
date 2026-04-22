@@ -12,9 +12,9 @@ use Modules\LabTrack\Application\AppContainer;
 use Modules\LabTrack\Domain\Port\Driven\MovementRepositoryInterface;
 use Modules\LabTrack\Model\Operator;
 use Modules\LabTrack\Model\Movement;
-use CoreModules\Admin\Model\User;
+use Modules\Admin\Model\User;
 use Carbon\Carbon;
-use Alxarafe\Attribute\Menu;
+use Alxarafe\Infrastructure\Attribute\Menu;
 
 #[Menu(
     menu: 'admin_sidebar',

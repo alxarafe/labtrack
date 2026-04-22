@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Alxarafe\Infrastructure\Persistence\Database;
 use Illuminate\Database\Schema\Blueprint;
 
 return new class {
@@ -14,8 +15,8 @@ return new class {
 
     public function up(): void
     {
-        if (!Capsule::schema()->hasTable($this->table)) {
-            Capsule::schema()->create($this->table, function (Blueprint $table) {
+        if (!Database::schema()->hasTable($this->table)) {
+            Database::schema()->create($this->table, function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('operator_id');
                 $table->unsignedBigInteger('order_id');
@@ -40,13 +41,13 @@ return new class {
 
     private function importLegacyData(): void
     {
-        $connection = Capsule::connection();
+        $connection = Database::connection();
         $legacyExists = !empty($connection->select("SHOW TABLES LIKE '{$this->legacyTable}'"));
 
         if ($legacyExists) {
             $records = $connection->select("SELECT * FROM {$this->legacyTable}");
             foreach ($records as $record) {
-                Capsule::table($this->table)->insert([
+                Database::table($this->table)->insert([
                     'id' => $record->id,
                     'operator_id' => (int)$record->id_operador,
                     'order_id' => (int)$record->id_orden,
@@ -66,6 +67,6 @@ return new class {
 
     public function down(): void
     {
-        Capsule::schema()->dropIfExists($this->table);
+        Database::schema()->dropIfExists($this->table);
     }
 };

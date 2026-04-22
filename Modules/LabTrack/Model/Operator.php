@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\LabTrack\Model;
 
 use Alxarafe\Infrastructure\Persistence\Model\Model;
-use CoreModules\Admin\Model\User;
+use Modules\Admin\Model\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Operator extends Model

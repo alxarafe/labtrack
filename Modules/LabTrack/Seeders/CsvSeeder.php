@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\LabTrack\Seeders;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Alxarafe\Infrastructure\Persistence\Database;
 
 class CsvSeeder
 {
@@ -21,13 +21,13 @@ class CsvSeeder
         }
 
         // Cost Centers
-        if (file_exists($importDir . 'centroscosto.csv') && Capsule::table('cost_centers')->count() === 0) {
+        if (file_exists($importDir . 'centroscosto.csv') && Database::table('cost_centers')->count() === 0) {
             $data = $this->readCsv($importDir . 'centroscosto.csv');
             foreach ($data as $row) {
                 if (!isset($row[0], $row[1], $row[2])) {
                     continue;
                 }
-                Capsule::table('cost_centers')->insert([
+                Database::table('cost_centers')->insert([
                     'id' => (int)$row[0],
                     'name' => $row[1],
                     'active' => $row[2] === '1',
@@ -39,13 +39,13 @@ class CsvSeeder
         }
 
         // Families
-        if (file_exists($importDir . 'familias.csv') && Capsule::table('families')->count() === 0) {
+        if (file_exists($importDir . 'familias.csv') && Database::table('families')->count() === 0) {
             $data = $this->readCsv($importDir . 'familias.csv');
             foreach ($data as $row) {
                 if (!isset($row[0], $row[1], $row[2], $row[3])) {
                     continue;
                 }
-                Capsule::table('families')->insert([
+                Database::table('families')->insert([
                     'id' => (int)$row[0],
                     'cost_center_id' => (int)$row[1],
                     'name' => $row[2],
@@ -66,8 +66,8 @@ class CsvSeeder
                 }
 
                 // Insert process if not exists
-                if (Capsule::table('processes')->where('id', (int)$row[0])->count() === 0) {
-                    Capsule::table('processes')->insert([
+                if (Database::table('processes')->where('id', (int)$row[0])->count() === 0) {
+                    Database::table('processes')->insert([
                         'id' => (int)$row[0],
                         'name' => $row[2],
                         'active' => $row[3] === '1',
@@ -78,12 +78,12 @@ class CsvSeeder
                 }
 
                 // Insert Pivot family_process
-                $exists = Capsule::table('family_process')
+                $exists = Database::table('family_process')
                     ->where('family_id', (int)$row[1])
                     ->where('process_id', (int)$row[0])
                     ->count() === 0;
                 if ($exists) {
-                    Capsule::table('family_process')->insert([
+                    Database::table('family_process')->insert([
                         'family_id' => (int)$row[1],
                         'process_id' => (int)$row[0],
                     ]);
@@ -100,8 +100,8 @@ class CsvSeeder
                 }
 
                 // Insert sequence if not exists
-                if (Capsule::table('sequences')->where('id', (int)$row[0])->count() === 0) {
-                    Capsule::table('sequences')->insert([
+                if (Database::table('sequences')->where('id', (int)$row[0])->count() === 0) {
+                    Database::table('sequences')->insert([
                         'id' => (int)$row[0],
                         'name' => $row[2],
                         'active' => $row[3] === '1',
@@ -114,12 +114,12 @@ class CsvSeeder
                 }
 
                 // Insert Pivot process_sequence
-                $exists = Capsule::table('process_sequence')
+                $exists = Database::table('process_sequence')
                     ->where('process_id', (int)$row[1])
                     ->where('sequence_id', (int)$row[0])
                     ->count() === 0;
                 if ($exists) {
-                    Capsule::table('process_sequence')->insert([
+                    Database::table('process_sequence')->insert([
                         'process_id' => (int)$row[1],
                         'sequence_id' => (int)$row[0],
                     ]);

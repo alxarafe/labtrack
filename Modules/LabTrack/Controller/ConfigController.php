@@ -10,12 +10,12 @@ use Alxarafe\Infrastructure\Lib\Functions;
 use Alxarafe\Infrastructure\Lib\Trans;
 use Alxarafe\Infrastructure\Persistence\Database;
 use Modules\LabTrack\Model\Operator;
-use CoreModules\Admin\Model\User;
+use Modules\Admin\Model\User;
 use Modules\LabTrack\Model\CostCenter;
 use Modules\LabTrack\Model\Family;
 use Modules\LabTrack\Model\Process;
 use Modules\LabTrack\Model\Sequence;
-use Alxarafe\Attribute\Menu;
+use Alxarafe\Infrastructure\Attribute\Menu;
 
 #[Menu(
     menu: 'admin_sidebar',
