@@ -3,29 +3,6 @@
     "description": "LabTrack Application",
     "type": "project",
     "license": "GPL-3.0-or-later",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../alxarafe",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "../resource-controller",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "../resource-eloquent",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require": {
         "php": "^8.2",
         "alxarafe/alxarafe": "dev-main"
